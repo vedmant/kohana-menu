@@ -1,27 +1,41 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
+/**
+ * Represents a single Menu type HTML entity
+ */
 class Kohana_Menu {
 
-	const STR_COMP_MODE_EXACT = 'str_comp_exact';
-	const STR_COMP_MODE_CONTAINS = 'str_comp_contains';
-
-	public static $str_comp_mode = self::STR_COMP_MODE_EXACT;
-
-	protected $config;
-	protected $menu;
-	protected $view;
-
+	/**
+	 * @var array Current menu config file
+	 */
+	protected $_config;
 
 	/**
-	 * @param    string    $config     see factory()
+	 * @var View Current menu view
 	 */
-	public function __construct($config)
-	{
-		$this->config = Kohana::$config->load($config);
-		$this->view = View::factory($this->config['view']);
+	protected $_view;
 
-		foreach ($this->config['items'] as $item) {
-			$this->menu['items'][] = new Kohana_Menu_Item($item);
+	/**
+	 * @var array An (ordered) array of Menu_Items in this menu
+	 * @since 2.0
+	 */
+	protected $_items;
+
+	/**
+	 * @var Menu_Item Reference to the currently active menu item
+	 */
+	protected $_active_item;
+
+	/**
+	 * @param string $config The name of the menu config file in config/menu/ dir
+	 * @see self::factory
+	 */
+	public function __construct($config = 'bootstrap')
+	{
+		$this->_config = Kohana::$config->load($config);
+		$this->_view = View::factory($this->_config['view']);
+
+		foreach ($this->_config['items'] as $key => $item) {
+			$this->_items[$key] = new Menu_Item($item, $this);
 		}
 	}
 
@@ -30,10 +44,12 @@ class Kohana_Menu {
 	 * @throws Kohana_Exception
 	 * @return Menu
 	 */
-	public static function factory($config = 'default')
+	public static function factory($config = 'bootstrap')
 	{
 		if (Kohana::find_file('config/menu', $config) === FALSE) {
-			throw new Kohana_Exception('Menu configuration file ":path" not found!', [':path'=> 'config/menu/'.$config.EXT]);
+			throw new Kohana_Exception('Menu configuration file ":path" not found!', [':path'=> APPPATH.'config/menu/'.$config
+				.EXT
+			]);
 		}
 		return new Menu('menu/'.$config);
 	}
@@ -43,31 +59,9 @@ class Kohana_Menu {
 	 */
 	public function render()
 	{
-		return $this->view
-			->set('menu', $this->menu)
+		return $this->_view
+			->set('menu', $this)
 			->render();
-	}
-
-	/**
-	 * @param object $items object ORM that contains main menu items
-	 * @return array array that contains menu items from database
-	 */
-	private function get_from_database_orm($items)
-	{
-		$temp = array();
-
-		foreach ($items as $key => $item) {
-			$temp[$key]['url'] = $item->url;
-			$temp[$key]['title'] = $item->title;
-			if ($item->classes) {
-				$temp[$key]['classes'] = array($item->classes);
-			}
-			$subcategories = $item->subcategories->find_all();
-			if ($subcategories->count() > 0) {
-				$temp[$key]['items'] = $this->get_from_database_orm($subcategories);
-			}
-		}
-		return $temp;
 	}
 
 	/**
@@ -77,129 +71,59 @@ class Kohana_Menu {
 	 */
 	public function __toString()
 	{
-		try {
-			return $this->render();
-		} catch (Exception $e) {
-			Kohana::$log->add(Log::DEBUG, $e->getMessage());
+		// Try to guess the current active menu item
+		if (array_key_exists('auto_mark_current', $this->_config) && $this->_config['auto_mark_current']) {
+			$this->set_current(Request::current()->uri());
 		}
-		return '';
+
+		return $this->render();
 	}
 
 	/**
-	 * Marks an item with a css class as the current item.
-	 * The class can be set with the "current_class" config key.
-	 *
-	 * @param    string    $url    the url of the affected item
-	 * @return    Nav $this
+	 * @since 2.0
+	 * @return array
 	 */
-	public function set_current($url = '')
+	public function get_items()
 	{
-		return $this->add_class($url, $this->config['current_class']);
+		return $this->_items;
 	}
 
 	/**
-	 * @param    string    $url
-	 * @param    string    $title    the new title
-	 * @return    Nav $this
+	 * @since 2.0
+	 * @param int|string $id The ID of the menu (numerical array ID from the config file) or URL of a menu item
+	 * @return Menu_Item|bool The active menu item or FALSE when item not found
 	 */
-	public function set_title($url, $title)
+	public function set_current($id = 0)
 	{
-		$item =& Menu::get_item_by_url($url, $this->menu);
-		if (! empty($item)) {
-			$item['title'] = $title;
+		$item = NULL;
+
+		// Menu empty!
+		if (count($this->_items) === 0) {
+			return FALSE;
 		}
-		return $this;
-	}
 
-	/**
-	 * @param    string    $url
-	 * @param    string    $new_url    the url will be changed to this value
-	 * @return    Nav $this
-	 */
-	public function set_url($url, $new_url)
-	{
-		$item =& Menu::get_item_by_url($url, $this->menu);
-		if (! empty($item)) {
-			$item['url'] = $new_url;
-		}
-		return $this;
-	}
-
-	/**
-	 * @param    string    $url
-	 * @param    string    $class    the css class to be added
-	 * @return    Nav $this
-	 */
-	public function add_class($url, $class)
-	{
-		$item =& Menu::get_item_by_url($url, $this->menu);
-		if (! empty($item)) {
-			if (! isset($item['classes'])) {
-				$item['classes'] = array();
+		if (is_int($id)) { // By ID
+			if (array_key_exists($id, $this->_items)) {
+				$item = $this->_items[$id];
 			}
-			if (! in_array($class, $item['classes'])) {
-				$item['classes'][] = $class;
-			}
-		}
-		return $this;
-	}
-
-	/**
-	 * @param    string    $url
-	 * @param    string    $class    the css class to be removed
-	 * @return    Nav $this
-	 */
-	public function remove_class($url, $class)
-	{
-		$item =& Menu::get_item_by_url($url, $this->menu);
-		if (! empty($item) AND isset($item['classes'])) {
-			$matching_class_key = array_search($class, $item['classes']);
-			if ($matching_class_key !== FALSE) {
-				unset($item['classes'][$matching_class_key], $matching_class_key);
-			}
-		}
-		return $this;
-	}
-
-
-	/**
-	 * @param    string    $url    the link url to search for
-	 * @param    array    $menu    the whole menu array or a sublevel
-	 * @return    array    the first matching item or an empty array
-	 */
-	protected static function &get_item_by_url($url, array &$menu)
-	{
-		$null_array = array();
-		if (! isset($menu['items'])) {
-			return $null_array;
-		}
-		foreach ($menu['items'] as &$item) {
-			if (Menu::strings_match($item['url'], $url)) {
-				return $item;
-			}
-			else {
-				$result_from_child_items =& Menu::get_item_by_url($url, $item);
-				if (! empty($result_from_child_items)) {
-					return $result_from_child_items;
+		} else { // By URL
+			foreach ($this->_items as $menu_item) {
+				if ($menu_item->url === $id) {
+					$item = $menu_item;
 				}
 			}
 		}
-		return $null_array;
-	}
 
-	protected static function strings_match($a, $b)
-	{
-		return call_user_func(array('Menu', Menu::$str_comp_mode), $a, $b);
-	}
+		// Set item as active
+		if ($item instanceof Menu_Item) { // Item found in the menu
 
-	public static function str_comp_exact($a, $b)
-	{
-		return $a == $b;
-	}
+			// Unset old active item
+			if ($this->_active_item instanceof Menu_Item) {
+				$this->_active_item->remove_class($this->_config['current_class']);
+			}
+			return $this->_active_item = $item->add_class($this->_config['current_class']);
+		}
 
-	public static function str_comp_contains($a, $b)
-	{
-		return (bool) strstr($a, $b);
+		return FALSE;
 	}
-
 }

@@ -21,18 +21,17 @@ class Kohana_Menu_Item {
 		'siblings' => [] // Sub-links
 	];
 
-	/**
-	 * @var bool Whether the menu item has the active class
-	 * @since 2.0
-	 */
-	public $active = FALSE;
+	private $_menu;
 
 	/**
 	 * @param array $item_config Menu item config
+	 * @param \Menu $menu The menu where this item belongs
 	 * @since 2.0
 	 */
-	public function __construct(array $item_config)
+	public function __construct(array $item_config, Menu $menu)
 	{
+		$this->_menu = $menu;
+
 		$this->_config['title'] = array_key_exists('icon', $item_config) ? "<i class=\"{$item_config['icon']}\"></i> " : NULL;
 		$this->_config['title'] .= array_key_exists('title', $item_config) ? $item_config['title'] : NULL;
 		$this->_config['tooltip'] = array_key_exists('tooltip', $item_config) ? $item_config['tooltip'] : NULL;
@@ -47,7 +46,7 @@ class Kohana_Menu_Item {
 		// Sub-menu
 		if (array_key_exists('items', $item_config) && count($item_config['items']) > 0) {
 			foreach ($item_config['items'] as $sibling) {
-				$this->_config['siblings'][] = new Menu_Item($sibling);
+				$this->_config['siblings'][] = new Menu_Item($sibling, $menu);
 			}
 		}
 	}
@@ -72,6 +71,36 @@ class Kohana_Menu_Item {
 	}
 
 	/**
+	 * Add a CSS class to the current item
+	 *
+	 * @since 2.0
+	 * @param string $class
+	 * @return Kohana_Menu_Item
+	 */
+	public function add_class($class)
+	{
+		if (! in_array($class, $this->_config['classes'])) {
+			$this->_config['classes'][] = $class;
+		}
+		return $this;
+	}
+
+	/**
+	 * Remove a CSS class from the current menu item
+	 *
+	 * @since 2.0
+	 * @param string $class
+	 * @return Kohana_Menu_Item
+	 */
+	public function remove_class($class)
+	{
+		if ($key = array_search($class, $this->_config['classes'])) {
+			unset($this->_config['classes'][$key]);
+		}
+		return $this;
+	}
+
+	/**
 	 * @since 2.0
 	 * @param string $name
 	 * @return mixed
@@ -82,4 +111,5 @@ class Kohana_Menu_Item {
 			return $this->_config[$name];
 		}
 	}
+
 }

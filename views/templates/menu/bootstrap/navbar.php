@@ -7,7 +7,7 @@
 ?>
 <ul class="nav">
 
-	<?foreach ($menu['items'] as $item):
+	<?foreach ($menu->get_items() as $item):
 
 	// Is this a dropdown-menu with sibling links?
 	if ($item->has_siblings()):?>
