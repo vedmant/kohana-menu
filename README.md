@@ -5,6 +5,7 @@ This is a fork of the original Kohana Menu module by Bastian Bräu. I've customi
 * Support for Twitter Bootstrap 2.0 style menus (icons, dropdown menus)
 * Menu items are objects
 * General code improvements + usage of PHP 5.4
+* Removed support for storing links in the database
 
 Some aspects of the modified module might not work.
 

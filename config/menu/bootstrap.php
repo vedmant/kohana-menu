@@ -5,7 +5,6 @@
  * @author Ando Roots <ando@sqroot.eu>
  */
 return [
-	'driver'        => 'file', // You can use 'database' or 'file', database uses ORM driver
 	'view'          => 'templates/menu/bootstrap/navbar', // The view file
 	'current_class' => 'active', // The set_current() method uses this setting to mark the current menu item
 

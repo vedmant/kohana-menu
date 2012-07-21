@@ -20,14 +20,8 @@ class Kohana_Menu {
 		$this->config = Kohana::$config->load($config);
 		$this->view = View::factory($this->config['view']);
 
-		if ($this->config['driver'] == 'database') {
-			$menu = ORM::factory('menu_item');
-			$items = $menu->where('parent_id', '=', 0)->find_all();
-			$this->menu['items'] = $this->get_from_database_orm($items);
-		} else if ($this->config['driver'] === 'file') {
-			foreach ($this->config['items'] as $item) {
-				$this->menu['items'][] = new Kohana_Menu_Item($item);
-			}
+		foreach ($this->config['items'] as $item) {
+			$this->menu['items'][] = new Kohana_Menu_Item($item);
 		}
 	}
 
@@ -84,9 +78,9 @@ class Kohana_Menu {
 	public function __toString()
 	{
 		try {
-		return $this->render();
-		}catch (Exception $e){
-			Kohana::$log->add(Log::DEBUG,$e->getMessage());
+			return $this->render();
+		} catch (Exception $e) {
+			Kohana::$log->add(Log::DEBUG, $e->getMessage());
 		}
 		return '';
 	}
