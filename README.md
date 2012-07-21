@@ -6,6 +6,8 @@ This is a fork of the original Kohana Menu module by Bastian Bräu. I've customi
 * Menu items are objects
 * General code improvements + usage of PHP 5.4
 
+Some aspects of the modified module might not work.
+
 ## Basics
 
 The menus are defined in configuration files, which must be placed in the `config/menu` folder.

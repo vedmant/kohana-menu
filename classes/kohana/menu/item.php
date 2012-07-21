@@ -52,6 +52,9 @@ class Kohana_Menu_Item {
 		}
 	}
 
+	/**
+	 * @return mixed Rendered menu item content (typically a link)
+	 */
 	public function __toString()
 	{
 		return HTML::anchor($this->_config['url'], $this->_config['title'], [
