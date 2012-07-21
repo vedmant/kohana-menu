@@ -1,36 +1,40 @@
-# Menu generator for Kohana 3 version 2.0 WIP
+# Menu module for Kohana 3 (version 2.0 WIP)
 
-This is a fork of the original Kohana Menu module by Bastian Bräu. I've customized it to my own needs. Notable changes:
+This Kohana module started out as a fork of the original Kohana Menu module by Bastian Bräu (http://github
+.com/b263/kohana-menu), but I've changed the code considerably.
+
+Some notable changes:
 
 * Support for Twitter Bootstrap 2.0 style menus (icons, dropdown menus)
 * Menu items are objects
 * General code improvements + usage of PHP 5.4
 * Removed support for storing links in the database
 
-Some aspects of the modified module might not work.
+Some aspects of the modified module might not work since they are untested.
 
 ## Basics
 
 The menus are defined in configuration files, which must be placed in the `config/menu` folder.
 
-See [config/menu/example.php](http://github.com/b263/kohana-menu/blob/master/config/menu/example.php)
+See [config/menu/bootstrap.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/bootstrap.php)
 
 To render the menu without modifications, call:
 
 	Menu::factory()->render();
+	// or echo (string)Menu::factory()
 
 ## Installation
 
 1.	Place the files in the modules directory. Example:
 
-		git clone http://github.com/b263/kohana-menu.git modules/menu
+		git clone git://github.com/anroots/kohana-menu.git modules/menu
 
-2.	Create a folder `menu` in your applications config directory, copy the `menu/example.php` into it, rename it to `default.php` and adjust it to fit your navigation.
+2.	Create a folder `menu` in your applications config directory, copy the `menu/bootstrap.php` into it, and adjust it to fit your navigation.
 
 		mkdir -p application/config/menu
-		cp modules/menu/config/menu/example.php application/config/menu/default.php
+		cp modules/menu/config/menu/bootstrap.php application/config/menu/bootstrap.php
 
-		# edit application/config/menu/default.php
+		# edit application/config/menu/bootstrap.php
 
 3.	Activate the module in the `bootstrap.php` file.
 
@@ -53,25 +57,4 @@ The config setting `current_class` defines the css class, which will be used by 
 
 	$menu->set_current('article/show');
 
-The parameter of `set_current()` is the URL segment of the respective item.
-
-## Changing menu item settings
-
-You can change the settings of each item with the following methods:
-
-	$item_url = 'home';
-	$menu->set_title($item_url, 'New title')
-		 ->add_class($item_url, 'active')
-		 ->remove_class($item_url, 'inactive')
-		 ->set_url($item_url, 'new/url');
-
-## Matching URLs
-
-By default, the URL parameter must exactly match the predefined `url` setting of the menu item, which could have changed in the meantime, by a call of `set_url`:
-
-	$menu->set_url('artice/show', 'article/show/123');
-
-You can change this behaviour with the static `$str_comp_mode` property:
-
-	Menu::$str_comp_mode = Menu::STR_COMP_MODE_CONTAINS; // uses strstr(), no regex support
-	// default value is Menu::STR_COMP_MODE_EXACT
+The parameter of `set_current()` is the URL segment of the respective item or its ID.
