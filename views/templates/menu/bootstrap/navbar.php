@@ -7,26 +7,20 @@
 ?>
 <ul class="nav">
 
-	<?foreach ($menu['items'] as $menu_item):
-
-	// Get menu item values
-	$item = Menu::extract_values($menu_item);
+	<?foreach ($menu['items'] as $item):
 
 	// Is this a dropdown-menu with sibling links?
-	if (array_key_exists('items', $item)):?>
+	if ($item->has_siblings()):?>
 
-		<li class="dropdown  <?=implode(' ', $item['classes'])?>" title="<?=$item['tooltip']?>">
+		<li class="dropdown  <?=implode(' ', $item->classes)?>" title="<?=$item->tooltip?>">
 			<a href="#"
 			   class="dropdown-toggle"
-			   data-toggle="dropdown"><?=$item['title']?><b class="caret"></b>
+			   data-toggle="dropdown"><?=$item->title?><b class="caret"></b>
 			</a>
 			<ul class="dropdown-menu">
-				<?foreach ($item['items'] as $menu_subitem):
-
-				$subitem = Menu::extract_values($menu_subitem)?>
-
+				<?foreach ($item->siblings as $subitem): ?>
 				<li>
-					<?=HTML::anchor($subitem['url'], $subitem['title'], ['title'=> $subitem['tooltip']], NULL, FALSE)?>
+					<?=(string) $subitem?>
 				</li>
 				<? endforeach?>
 			</ul>
@@ -35,8 +29,8 @@
 		<? else:
 		// No, this is a "normal", single-level menu
 		?>
-		<li class="<?=implode(' ', $item['classes'])?>">
-			<?=HTML::anchor($item['url'], $item['title'], ['title'=> $item['tooltip']], NULL, FALSE)?>
+		<li class="<?=implode(' ', $item->classes)?>">
+			<?=(string) $item?>
 		</li>
 
 		<? endif ?>

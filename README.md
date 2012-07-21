@@ -1,4 +1,10 @@
-# Menu generator for Kohana 3
+# Menu generator for Kohana 3 version 2.0 WIP
+
+This is a fork of the original Kohana Menu module by Bastian Bräu. I've customized it to my own needs. Notable changes:
+
+* Support for Twitter Bootstrap 2.0 style menus (icons, dropdown menus)
+* Menu items are objects
+* General code improvements + usage of PHP 5.4
 
 ## Basics
 

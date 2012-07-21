@@ -13,36 +13,36 @@ return [
 		[
 			'url'     => 'issues',
 			'title'   => __('nav.issues'),
-			'icon'    => 'tasks', // Any Bootstrap (or Font Awesome More) icon name, without the icon- prefix
+			'icon'    => 'icon-tasks', // Any Bootstrap (or Font Awesome More) icon name
 			'tooltip' => __('nav.tooltip.issues') // Text for a[title] attribute
 		],
 		[
 			'url'     => 'users',
 			'title'   => __('nav.persons'),
-			'icon'    => 'user',
+			'icon'    => 'icon-user',
 			'tooltip' => __('nav.tooltip.persons')
 		],
 		[
 			'url'     => 'projects',
-			'icon'    => 'folder-close',
+			'icon'    => 'icon-folder-close',
 			'title'   => __('nav.projects'),
 			'tooltip' => __('nav.tooltip.projects')
 		],
 		[
 			'url'     => 'reports',
 			'title'   => __('nav.reports'),
-			'icon'    => 'list-ol',
+			'icon'    => 'icon-list-ol',
 			'tooltip' => __('nav.reports.tooltip'),
 
 			'items'   => [
 				[
 					'url'    => 'logs',
-					'icon'   => 'align-justify',
+					'icon'   => 'icon-align-justify',
 					'title'  => __('nav.reports.logs'),
 					'tooltip'=> __('nav.reports.tooltip.logs')
 				],
 				[
-					'icon'   => 'amazon',
+					'icon'   => 'icon-amazon',
 					'title'  => __('nav.reports.bills'),
 					'tooltip'=> __('nav.reports.tooltip.bills')
 				]

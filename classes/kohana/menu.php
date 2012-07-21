@@ -11,32 +11,6 @@ class Kohana_Menu {
 	protected $menu;
 	protected $view;
 
-	/**
-	 * Get menu item values, all of them. Missing values are filled with defaults.
-	 * Used to make sure we don't get undefined index exceptions.
-	 *
-	 * @author Ando Roots <ando@sqroot.eu>
-	 * @static
-	 * @param array $config Menu item config
-	 * @return array
-	 */
-	public static function extract_values(array $config)
-	{
-		$item = [];
-
-		$item['title'] = array_key_exists('icon', $config) ? "<i class=\"icon-{$config['icon']}\"></i> " : NULL;
-		$item['title'] .= array_key_exists('title', $config) ? $config['title'] : NULL;
-		$item['tooltip'] = array_key_exists('tooltip', $config) ? $config['tooltip'] : NULL;
-		$item['url'] = array_key_exists('url', $config) ? $config['url'] : '#';
-		$item['classes'] = array_key_exists('classes', $config) ? $config['classes'] : [];
-
-		// Submenu
-		if (array_key_exists('items', $config)) {
-			$item['items'] = $config['items'];
-		}
-
-		return $item;
-	}
 
 	/**
 	 * @param    string    $config     see factory()
@@ -50,18 +24,23 @@ class Kohana_Menu {
 			$menu = ORM::factory('menu_item');
 			$items = $menu->where('parent_id', '=', 0)->find_all();
 			$this->menu['items'] = $this->get_from_database_orm($items);
-		}
-		else if ($this->config['driver'] == 'file') {
-			$this->menu = array('items' => &$this->config['items']);
+		} else if ($this->config['driver'] === 'file') {
+			foreach ($this->config['items'] as $item) {
+				$this->menu['items'][] = new Kohana_Menu_Item($item);
+			}
 		}
 	}
 
 	/**
-	 * @param    string    $config    the config file that contains the menu array
-	 * @return    Menu
+	 * @param string $config The config file that contains the menu array
+	 * @throws Kohana_Exception
+	 * @return Menu
 	 */
 	public static function factory($config = 'default')
 	{
+		if (Kohana::find_file('config/menu', $config) === FALSE) {
+			throw new Kohana_Exception('Menu configuration file ":path" not found!', [':path'=> 'config/menu/'.$config.EXT]);
+		}
 		return new Menu('menu/'.$config);
 	}
 
@@ -71,7 +50,7 @@ class Kohana_Menu {
 	public function render()
 	{
 		return $this->view
-			->set('menu', Menu::process_urls($this->menu))
+			->set('menu', $this->menu)
 			->render();
 	}
 
@@ -98,11 +77,18 @@ class Kohana_Menu {
 	}
 
 	/**
-	 * @see    render()
+	 * @since 1.0
+	 * @see render()
+	 * @return string
 	 */
 	public function __toString()
 	{
+		try {
 		return $this->render();
+		}catch (Exception $e){
+			Kohana::$log->add(Log::DEBUG,$e->getMessage());
+		}
+		return '';
 	}
 
 	/**
@@ -181,28 +167,6 @@ class Kohana_Menu {
 		return $this;
 	}
 
-	/**
-	 * Recursively apply URL::site to all internal links.
-	 *
-	 * @param    array    $menu    menu items
-	 * @return    array    the processed menu item
-	 */
-	protected static function process_urls(array $menu)
-	{
-		if (isset($menu['url'])) {
-			if (! 'http://' == substr($menu['url'], 0, 7)
-				AND ! 'https://' == substr($menu['url'], 0, 8)
-			) {
-				$menu['url'] = URL::site($menu['url']);
-			}
-		}
-		if (isset($menu['items'])) {
-			foreach ($menu['items'] as $key => &$item) {
-				$menu['items'][$key] = Menu::process_urls($menu['items'][$key]);
-			}
-		}
-		return $menu;
-	}
 
 	/**
 	 * @param    string    $url    the link url to search for
