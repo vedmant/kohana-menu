@@ -12,14 +12,14 @@ class Kohana_Menu_Item {
 	 * @var array Current item config
 	 * @since 2.0
 	 */
-	private $_config = [
+	private $_config = array(
 		'link'     => NULL, // Relative or absolute target for this menu item (href)
 		'title'    => NULL, // Visible text
 		'icon'     => NULL, // Icon class for this menu item
 		'tooltip'  => NULL, // Tooltip text for this menu item
-		'classes'  => [], // Extra classes for this menu item
-		'siblings' => [] // Sub-links
-	];
+		'classes'  => array(), // Extra classes for this menu item
+		'siblings' => array() // Sub-links
+	);
 
 	private $_menu;
 
@@ -56,9 +56,9 @@ class Kohana_Menu_Item {
 	 */
 	public function __toString()
 	{
-		return HTML::anchor($this->_config['url'], $this->_config['title'], [
+		return HTML::anchor($this->_config['url'], $this->_config['title'], array(
 			'title'=> $this->_config['tooltip']
-		], NULL, FALSE);
+		), NULL, FALSE);
 	}
 
 	/**
