@@ -1,7 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Represents a single menu item (typically a link) in the Menu.
- * @
  *
  * @author Ando Roots <ando@sqroot.eu>
  * @since 2.0

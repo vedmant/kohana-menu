@@ -2,7 +2,10 @@
 /**
  * Represents a single Menu type HTML entity
  */
-class Kohana_Menu {
+class Kohana_Menu
+{
+
+	const CONFIG_DIR = 'menu';
 
 	/**
 	 * @var array Current menu config file
@@ -46,12 +49,12 @@ class Kohana_Menu {
 	 */
 	public static function factory($config = 'bootstrap')
 	{
-		if (Kohana::find_file('config/menu', $config) === FALSE) {
-			throw new Kohana_Exception('Menu configuration file ":path" not found!', [':path'=> APPPATH.'config/menu/'.$config
-				.EXT
+		if (Kohana::find_file('config'.DIRECTORY_SEPARATOR.self::CONFIG_DIR, $config) === FALSE) {
+			throw new Kohana_Exception('Menu configuration file ":path" not found!', [
+				':path' => APPPATH.'config'.DIRECTORY_SEPARATOR.self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config.EXT
 			]);
 		}
-		return new Menu('menu/'.$config);
+		return new Menu(self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config);
 	}
 
 	/**
