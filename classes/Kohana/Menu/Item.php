@@ -33,8 +33,8 @@ class Kohana_Menu_Item {
 		$this->_menu = $menu;
 
 		$this->_config['title'] = array_key_exists('icon', $item_config) ? "<i class=\"{$item_config['icon']}\"></i> " : NULL;
-		$this->_config['title'] .= array_key_exists('title', $item_config) ? $item_config['title'] : NULL;
-		$this->_config['tooltip'] = array_key_exists('tooltip', $item_config) ? $item_config['tooltip'] : NULL;
+		$this->_config['title'] .= array_key_exists('title', $item_config) ? __($item_config['title']) : NULL;
+		$this->_config['tooltip'] = array_key_exists('tooltip', $item_config) ? __($item_config['tooltip']) : NULL;
 		$this->_config['url'] = array_key_exists('url', $item_config) ? $item_config['url'] : '#';
 		$this->_config['classes'] = array_key_exists('classes', $item_config) ? $item_config['classes'] : [];
 

@@ -1,58 +1,72 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH' OR die('No direct access allowed.';
 /**
  * Example config for Twitter Bootstrap main navbar menu
  *
  * @author Ando Roots <ando@sqroot.eu>
  */
 return [
-	'view'             => 'templates/menu/bootstrap/navbar', // The view file for the menu
-	'current_class'    => 'active', // The CSS class used to mark the active menu item
-	'auto_mark_current'=> FALSE, // Set to TRUE to enable active menu item guessing based on the initial request URI
 
 	/**
+	 * The view file for the menu.
+	 * Usually just some wrapper (ul) and foreach for menu items (li).
+	 */
+	'view'              => 'templates/menu/bootstrap/navbar',
+	
+	/**
+	 * The CSS class used to mark the active menu item
+	 */
+	'current_class'     => 'active',
+	
+	/**
+	 * Set to TRUE to enable active menu item guessing based on the initial request URI.
+	 * Will sometimes guess wrong, it's safer to manually mark the active link in the controller.
+	 */
+	'auto_mark_current' => FALSE,
+	
+	/**
 	 * A list of menu items. All params are optional.
+	 *
 	 * Params:
 	 *     url string The URL for the link, default #
-	 *     title string The displayed text string, suggested: use I18n __ function
+	 *     title string The displayed text string, I18n ) is applied
 	 *     icon string Icon for the menu item, displayed as <i class="VALUE"></i>
-	 *     tooltip string The tooltip text for the link
+	 *     tooltip string The tooltip text for the link, I18n ) is applied
 	 */
-	'items'            => [
-		 [
+	'items'             => [
+		[
 			'url'     => 'issues',
-			'title'   => __('nav.issues'),
+			'title'   => 'nav.issues',
 			'icon'    => 'icon-tasks',
-			'tooltip' => __('nav.tooltip.issues')
+			'tooltip' => 'nav.tooltip.issues'
 		],
 		[
 			'url'     => 'users',
-			'title'   => __('nav.persons'),
+			'title'   => 'nav.persons',
 			'icon'    => 'icon-user',
-			'tooltip' => __('nav.tooltip.persons')
+			'tooltip' => 'nav.tooltip.persons'
 		],
 		[
 			'url'     => 'projects',
 			'icon'    => 'icon-folder-close',
-			'title'   => __('nav.projects'),
-			'tooltip' => __('nav.tooltip.projects')
+			'title'   => 'nav.projects',
+			'tooltip' => 'nav.tooltip.projects'
 		],
 		[
 			'url'     => 'reports',
-			'title'   => __('nav.reports'),
+			'title'   => 'nav.reports',
 			'icon'    => 'icon-list-ol',
-			'tooltip' => __('nav.reports.tooltip'),
-
+			'tooltip' => 'nav.reports.tooltip',
 			'items'   => [
 				[
-					'url'    => 'logs',
-					'icon'   => 'icon-align-justify',
-					'title'  => __('nav.reports.logs'),
-					'tooltip'=> __('nav.reports.tooltip.logs')
+					'url'     => 'logs',
+					'icon'    => 'icon-align-justify',
+					'title'   => 'nav.reports.logs',
+					'tooltip' => 'nav.reports.tooltip.logs'
 				],
 				[
-					'icon'   => 'icon-amazon',
-					'title'  => __('nav.reports.bills'),
-					'tooltip'=> __('nav.reports.tooltip.bills')
+					'icon'    => 'icon-amazon',
+					'title'   => 'nav.reports.bills',
+					'tooltip' => 'nav.reports.tooltip.bills'
 				]
 			]
 		],
