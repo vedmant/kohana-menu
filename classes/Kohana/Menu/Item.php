@@ -13,15 +13,18 @@ class Kohana_Menu_Item
 	 * @since 2.0
 	 */
 	private $_config = [
-		'link'     => NULL, // Relative or absolute target for this menu item (href)
-		'title'    => NULL, // Visible text
-		'icon'     => NULL, // Icon class for this menu item
-		'tooltip'  => NULL, // Tooltip text for this menu item
-		'visible'  => TRUE,
 		'classes'  => [], // Extra classes for this menu item
-		'siblings' => [] // Sub-links
+		'icon'     => NULL, // Icon class for this menu item
+		'siblings' => [], // Sub-links
+		'title'    => NULL, // Visible text
+		'tooltip'  => NULL, // Tooltip text for this menu item
+		'url'      => '#', // Relative or absolute target for this menu item (href)
+		'visible'  => TRUE
 	];
 
+	/**
+	 * @var Menu
+	 */
 	private $_menu;
 
 	/**
@@ -33,12 +36,8 @@ class Kohana_Menu_Item
 	{
 		$this->_menu = $menu;
 
-		$this->_config['title'] = array_key_exists('icon', $item_config) ? "<i class=\"{$item_config['icon']}\"></i> " : NULL;
-		$this->_config['title'] .= array_key_exists('title', $item_config) ? __($item_config['title']) : NULL;
-		$this->_config['tooltip'] = array_key_exists('tooltip', $item_config) ? __($item_config['tooltip']) : NULL;
-		$this->_config['url'] = array_key_exists('url', $item_config) ? $item_config['url'] : '#';
-		$this->_config['classes'] = array_key_exists('classes', $item_config) ? $item_config['classes'] : [];
-		$this->_config['visible'] = array_key_exists('visible', $item_config) ? $item_config['visible'] : TRUE;
+		// Save item config options. Defaults are retained if not present in $item_config
+		$this->_config = array_replace($this->_config, $item_config, ['items' => []]);
 
 		// Apply URL::site
 		if (! 'http://' == substr($this->_config['url'], 0, 7)    AND ! 'https://' == substr($this->_config['url'], 0, 8)) {
@@ -108,7 +107,8 @@ class Kohana_Menu_Item
 		return $this;
 	}
 
-	public function is_visible(){
+	public function is_visible()
+	{
 		return $this->_config['visible'];
 	}
 
