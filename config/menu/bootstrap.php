@@ -27,6 +27,7 @@ return [
 	 * A list of menu items. All params are optional.
 	 *
 	 * Params:
+	 *     classes array An array of CSS classes to apply to the menu item container
 	 *     url string The URL for the link, default #
 	 *     title string The displayed text string, I18n is applied
 	 *     icon string Icon for the menu item, displayed as <i class="VALUE"></i>

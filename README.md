@@ -1,36 +1,46 @@
 # HTML Navigation Module for Kohana 3.3
 
-This Kohana module started out as a fork of the original Kohana Menu module by
-[Bastian Bräu](http://github.com/b263/kohana-menu) with the purpose of simplifying dynamic navigation building, most
-notably the issue of
+Simplify rendering, building and maintenance of simple, dynamic navigation menus. We don't want _this_ in our HTML.
 
-```html
+```php
+<? if ($user->get_role() === Role::ANONYMOUS):?>
 <ul>
-	<li><a href="/">Home</a></li>
-	<li><a href="/about" class="active">About</a></li>
+	<li><a href="/" <?= $page === 'home' ? 'class="active"' : NULL?>>Home</a></li>
+	<li><a href="/about" <?= $page === 'about' ? 'class="active"' : NULL?>>About</a></li>
 </ul>
+<? // elseif (...)?>
 ```
 
-Some aspects of the module might not work since they are untested.
+**Some aspects of the module might not work since they are untested.**
 
 ## Basics
 
-The menus are defined in configuration files, which must be placed in the `config/menu` folder
-(see [config/menu/bootstrap.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/bootstrap.php)).
+You define your menus in Kohana configuration files (see [config/menu/bootstrap.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/bootstrap.php)). For example, a WordPress type blog might have...
 
-To render the menu without modifications, call:
+* Public main navigation menu
+* Public footer menu
+* Admin-only menu on the public pages, when admin is logged in
+* Admin-only menu on the administrator interface
+
+Normally, you'd build HTML views with `ul` and `li` elements and then write some PHP to highlight the active link. This is
+difficult to maintain (DRY) and too much hassle (not to mention ugly).
+
+Then, in your (main) controller (or view), you determine which menu configuration to use (based on user role or other factors),
+use the factory method to construct a new Menu object, set the active link and render it in your view. Done.
+
+### Example, rendering the default menu
 
 ```php
 <?php
 // APPPATH/views/template.php
 
 echo Menu::factory('bootstrap')->render();
-// echo (string)Menu::factory()
+// echo Menu::factory()
 ```
 
 ## Installation
 
-1.	Place the files in the modules directory.
+1.	Place the files in your modules directory.
 
 ### As a Git submodule:
 
@@ -77,6 +87,9 @@ Kohana::modules(array(
 </div>
 ```
 
+You might wish to instantiate the menu in your main controller, since this gives you a way to interact with the Menu object
+before it's rendered.
+
 ## Config files
 
 You can use different config files by setting the factory's `$config` parameter.
@@ -96,6 +109,9 @@ The config setting `current_class` defines the css class, which will be used by 
 The parameter of `set_current()` is the URL value of the respective item or its ID.
 
 # Licence
+
+The Kohana module started out as a fork of the original Kohana Menu module by
+[Bastian Bräu](http://github.com/b263/kohana-menu), but is now independently developed.
 
 The MIT License (MIT)
 Copyright (c) 2012 Ando Roots

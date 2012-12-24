@@ -107,6 +107,9 @@ class Kohana_Menu_Item
 		return $this;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function is_visible()
 	{
 		return $this->_config['visible'];
