@@ -39,6 +39,12 @@ class Kohana_Menu_Item
 		// Save item config options. Defaults are retained if not present in $item_config
 		$this->_config = array_replace($this->_config, $item_config, ['items' => []]);
 
+		$this->_config['title'] = __($this->_config['title']);
+		$this->_config['tooltip'] = __($this->_config['tooltip']);
+		if (! empty($this->_config['icon'])) {
+			$this->_config['title'] = $this->_render_icon().$this->_config['title'];
+		}
+
 		// Apply URL::site
 		if (! 'http://' == substr($this->_config['url'], 0, 7)    AND ! 'https://' == substr($this->_config['url'], 0, 8)) {
 			$this->_config['url'] = URL::site($this->_config['url']);
@@ -125,6 +131,14 @@ class Kohana_Menu_Item
 		if (array_key_exists($name, $this->_config)) {
 			return $this->_config[$name];
 		}
+	}
+
+	/**
+	 * @return string HTML for the link icon
+	 */
+	private function _render_icon()
+	{
+		return '<i class="'.$this->_config["icon"].'"></i> ';
 	}
 
 }
