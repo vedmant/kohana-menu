@@ -6,7 +6,8 @@
  * @author Ando Roots <ando@sqroot.eu>
  * @since 2.0
  */
-class Kohana_Menu_Item {
+class Kohana_Menu_Item
+{
 
 	/**
 	 * @var array Current item config
@@ -17,6 +18,7 @@ class Kohana_Menu_Item {
 		'title'    => NULL, // Visible text
 		'icon'     => NULL, // Icon class for this menu item
 		'tooltip'  => NULL, // Tooltip text for this menu item
+		'visible'  => TRUE,
 		'classes'  => [], // Extra classes for this menu item
 		'siblings' => [] // Sub-links
 	];
@@ -37,6 +39,7 @@ class Kohana_Menu_Item {
 		$this->_config['tooltip'] = array_key_exists('tooltip', $item_config) ? __($item_config['tooltip']) : NULL;
 		$this->_config['url'] = array_key_exists('url', $item_config) ? $item_config['url'] : '#';
 		$this->_config['classes'] = array_key_exists('classes', $item_config) ? $item_config['classes'] : [];
+		$this->_config['visible'] = array_key_exists('visible', $item_config) ? $item_config['visible'] : TRUE;
 
 		// Apply URL::site
 		if (! 'http://' == substr($this->_config['url'], 0, 7)    AND ! 'https://' == substr($this->_config['url'], 0, 8)) {
@@ -56,9 +59,15 @@ class Kohana_Menu_Item {
 	 */
 	public function __toString()
 	{
-		return HTML::anchor($this->_config['url'], $this->_config['title'], [
-			'title'=> $this->_config['tooltip']
-		], NULL, FALSE);
+		return HTML::anchor(
+			$this->_config['url'],
+			$this->_config['title'],
+			[
+				'title' => $this->_config['tooltip']
+			],
+			NULL,
+			FALSE
+		);
 	}
 
 	/**
@@ -98,6 +107,10 @@ class Kohana_Menu_Item {
 			unset($this->_config['classes'][$key]);
 		}
 		return $this;
+	}
+
+	public function is_visible(){
+		return $this->_config['visible'];
 	}
 
 	/**

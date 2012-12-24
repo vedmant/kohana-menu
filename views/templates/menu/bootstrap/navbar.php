@@ -8,6 +8,9 @@
 <ul class="nav">
 
 	<?foreach ($menu->get_items() as $item):
+	if (! $item->is_visible()):
+		continue;
+	endif;
 
 	// Is this a dropdown-menu with sibling links?
 	if ($item->has_siblings()):?>
