@@ -17,6 +17,9 @@ Simplify rendering, building and maintenance of simple, dynamic navigation menus
 
 You define your menus in Kohana configuration files (see [config/menu/bootstrap.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/bootstrap.php)). For example, a WordPress type blog might have...
 
+Then, in your (main) controller (or view), you determine which menu configuration to use (based on user role or other factors),
+use the factory method to construct a new Menu object, set the active link and render it in your view. Done.
+
 * Public main navigation menu
 * Public footer menu
 * Admin-only menu on the public pages, when admin is logged in
@@ -24,9 +27,6 @@ You define your menus in Kohana configuration files (see [config/menu/bootstrap.
 
 Normally, you'd build HTML views with `ul` and `li` elements and then write some PHP to highlight the active link. This is
 difficult to maintain (DRY) and too much hassle (not to mention ugly).
-
-Then, in your (main) controller (or view), you determine which menu configuration to use (based on user role or other factors),
-use the factory method to construct a new Menu object, set the active link and render it in your view. Done.
 
 ### Example, rendering the default menu
 
@@ -40,14 +40,14 @@ echo Menu::factory('bootstrap')->render();
 
 ## Installation
 
-1.	Place the files in your modules directory.
+### Place the files in your modules directory.
 
-### As a Git submodule:
+#### As a Git submodule:
 
 ```bash
 git clone git://github.com/anroots/kohana-menu.git modules/menu
 ```
-### As a [Composer dependency](http://getcomposer.org)
+#### As a [Composer dependency](http://getcomposer.org)
 
 ```javascript
 {
@@ -59,7 +59,8 @@ git clone git://github.com/anroots/kohana-menu.git modules/menu
 }
 ```
 
-2.	Create a folder `menu` in your applications config directory, copy the `menu/bootstrap.php` into it, and adjust it to fit your navigation.
+### Create a folder `menu` in your applications config directory, copy the `menu/bootstrap.php` into it,
+and adjust it to fit your navigation.
 
 ```bash
 mkdir -p application/config/menu
@@ -67,7 +68,8 @@ cp modules/menu/config/menu/bootstrap.php application/config/menu/bootstrap.php
 # edit application/config/menu/bootstrap.php
 ```
 
-3.	Activate the module in the `bootstrap.php` file.
+### Activate the module in the `bootstrap.php` file.
+
 ```php
 <?php
 Kohana::modules(array(
@@ -76,7 +78,8 @@ Kohana::modules(array(
 ));
 ```
 
-4. Echo the output in your template
+### Echo the output in your template
+
 ```html
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
