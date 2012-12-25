@@ -11,14 +11,13 @@ Simplify rendering, building and maintenance of simple, dynamic navigation menus
 <? // elseif (...)?>
 ```
 
-**Some aspects of the module might not work since they are untested.**
-
 ## Basics
 
-You define your menus in Kohana configuration files (see [config/menu/bootstrap.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/bootstrap.php)). For example, a WordPress type blog might have...
-
+You define your menus in Kohana configuration files (see [config/menu/bootstrap.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/bootstrap.php)).
 Then, in your (main) controller (or view), you determine which menu configuration to use (based on user role or other factors),
 use the factory method to construct a new Menu object, set the active link and render it in your view. Done.
+
+A WordPress type blog might have...
 
 * Public main navigation menu
 * Public footer menu
@@ -27,6 +26,58 @@ use the factory method to construct a new Menu object, set the active link and r
 
 Normally, you'd build HTML views with `ul` and `li` elements and then write some PHP to highlight the active link. This is
 difficult to maintain (DRY) and too much hassle (not to mention ugly).
+
+Instead, describe your (standardised) menus in configuration files and have Kohana do the heavy lifting.
+
+```php
+<?php defined('SYSPATH' OR die('No direct access allowed.'));
+return [
+
+	/**
+	 * The view file for the menu.
+	 * Usually just some wrapper (ul) and foreach for menu items (li).
+	 */
+	'view'              => 'templates/menu/bootstrap/navbar',
+
+	/**
+	 * The CSS class used to mark the active menu item
+	 */
+	'current_class'     => 'active',
+
+	/**
+	 * Set to TRUE to enable active menu item guessing based on the initial request URI.
+	 * Will sometimes guess wrong, it's safer to manually mark the active link in the controller.
+	 */
+	'auto_mark_current' => FALSE,
+
+	/**
+	 * A list of menu items. All params are optional.
+	 *
+	 * Params:
+	 *     classes array An array of CSS classes to apply to the menu item container
+	 *     url string The URL for the link, default #
+	 *     title string The displayed text string, I18n is applied
+	 *     icon string Icon for the menu item, displayed as <i class="VALUE"></i>
+	 *     items array Nested (dropdown) menu configuration
+	 *     tooltip string The tooltip text for the link, I18n is applied
+	 *     visible bool Whether the menu item is currently shown. Default TRUE
+	 */
+	'items'             => [
+		[
+			'url'     => 'issues',
+			'title'   => 'nav.issues',
+			'icon'    => 'icon-tasks',
+			'tooltip' => 'nav.tooltip.issues'
+		],
+		[
+			'url'     => 'tasks',
+			'title'   => 'nav.tasks',
+			'icon'    => 'icon-dash',
+			'tooltip' => 'nav.tooltip.tasks'
+		],
+	],
+];
+```
 
 ### Example, rendering the default menu
 
@@ -114,13 +165,4 @@ The parameter of `set_current()` is the URL value of the respective item or its 
 # Licence
 
 The Kohana module started out as a fork of the original Kohana Menu module by
-[Bastian Bräu](http://github.com/b263/kohana-menu), but is now independently developed.
-
-The MIT License (MIT)
-Copyright (c) 2012 Ando Roots
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+[Bastian Bräu](http://github.com/b263/kohana-menu), but is now independently developed under the MIT licence.

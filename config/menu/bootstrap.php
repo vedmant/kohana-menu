@@ -31,6 +31,7 @@ return [
 	 *     url string The URL for the link, default #
 	 *     title string The displayed text string, I18n is applied
 	 *     icon string Icon for the menu item, displayed as <i class="VALUE"></i>
+	 *     items array Nested (dropdown) menu configuration
 	 *     tooltip string The tooltip text for the link, I18n is applied
 	 *     visible bool Whether the menu item is currently shown. Default TRUE
 	 */
