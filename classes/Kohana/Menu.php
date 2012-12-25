@@ -29,12 +29,13 @@ class Kohana_Menu
 	protected $_active_item;
 
 	/**
-	 * @param string $config The name of the menu config file in config/menu/ dir
+	 * @param array $config Menu configuration
+	 * @throws Kohana_Exception
 	 * @see self::factory
 	 */
-	public function __construct($config = 'bootstrap')
+	public function __construct(array $config)
 	{
-		$this->_config = Kohana::$config->load($config);
+		$this->_config = $config;
 		$this->_view = View::factory($this->_config['view']);
 
 		foreach ($this->_config['items'] as $key => $item) {
@@ -43,18 +44,32 @@ class Kohana_Menu
 	}
 
 	/**
-	 * @param string $config The config file that contains the menu array
+	 * Read menu configuration file
+	 *
+	 * @param string $config File name in config/menu dir
+	 * @return array Menu configuration array
 	 * @throws Kohana_Exception
-	 * @return Menu
 	 */
-	public static function factory($config = 'bootstrap')
+	protected static function _get_menu_config($config)
 	{
 		if (Kohana::find_file('config'.DIRECTORY_SEPARATOR.self::CONFIG_DIR, $config) === FALSE) {
 			throw new Kohana_Exception('Menu configuration file ":path" not found!', [
 				':path' => APPPATH.'config'.DIRECTORY_SEPARATOR.self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config.EXT
 			]);
 		}
-		return new Menu(self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config);
+
+		return Kohana::$config->load(self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config)
+			->as_array();
+	}
+
+	/**
+	 * @param string $config File name in config/menu/
+	 * @throws Kohana_Exception
+	 * @return Menu
+	 */
+	public static function factory($config = 'bootstrap')
+	{
+		return new Menu(self::_get_menu_config($config));
 	}
 
 	/**

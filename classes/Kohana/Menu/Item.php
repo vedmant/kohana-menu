@@ -12,15 +12,7 @@ class Kohana_Menu_Item
 	 * @var array Current item config
 	 * @since 2.0
 	 */
-	private $_config = [
-		'classes'  => [], // Extra classes for this menu item
-		'icon'     => NULL, // Icon class for this menu item
-		'siblings' => [], // Sub-links
-		'title'    => NULL, // Visible text
-		'tooltip'  => NULL, // Tooltip text for this menu item
-		'url'      => '#', // Relative or absolute target for this menu item (href)
-		'visible'  => TRUE
-	];
+	private $_config = [];
 
 	/**
 	 * @var Menu
@@ -34,13 +26,17 @@ class Kohana_Menu_Item
 	 */
 	public function __construct(array $item_config, Menu $menu)
 	{
+		$this->_config = self::get_default_config();
 		$this->_menu = $menu;
 
 		// Save item config options. Defaults are retained if not present in $item_config
 		$this->_config = array_replace($this->_config, $item_config, ['items' => []]);
 
+		// Translate visible strings
 		$this->_config['title'] = __($this->_config['title']);
 		$this->_config['tooltip'] = __($this->_config['tooltip']);
+
+		// Add icon to the title
 		if (! empty($this->_config['icon'])) {
 			$this->_config['title'] = $this->_render_icon().$this->_config['title'];
 		}
@@ -115,6 +111,7 @@ class Kohana_Menu_Item
 
 	/**
 	 * @return bool
+	 * @since 2.1
 	 */
 	public function is_visible()
 	{
@@ -135,10 +132,28 @@ class Kohana_Menu_Item
 
 	/**
 	 * @return string HTML for the link icon
+	 * @since 2.1
 	 */
 	private function _render_icon()
 	{
 		return '<i class="'.$this->_config["icon"].'"></i> ';
+	}
+
+	/**
+	 * @return array
+	 * @since 2.1
+	 */
+	public static function get_default_config()
+	{
+		return [
+			'classes'  => [], // Extra classes for this menu item
+			'icon'     => NULL, // Icon class for this menu item
+			'siblings' => [], // Sub-links
+			'title'    => NULL, // Visible text
+			'tooltip'  => NULL, // Tooltip text for this menu item
+			'url'      => '#', // Relative or absolute target for this menu item (href)
+			'visible'  => TRUE
+		];
 	}
 
 }
