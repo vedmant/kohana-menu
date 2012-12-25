@@ -1,4 +1,6 @@
 <?php
+require_once 'MenuBuilder.php';
+
 /**
  * Test case for Menu_Item
  *
@@ -7,19 +9,12 @@
  * @category   Test
  * @author     Ando Roots
  */
-class Menu_ItemTest extends Kohana_Unittest_TestCase
+class Menu_ItemTest extends MenuBuilder
 {
 
-	/**
-	 * @var Menu
-	 */
-	private $_menu;
-
-
-	public function setUp()
+	public function testLabelsAreTranslated()
 	{
-		parent::setUp();
-		$this->_menu = new Menu($this->_get_test_config());
+		$this->markTestIncomplete('Think of a way to mock I18n __()');
 	}
 
 	public function testNewItemHasDefaultValues()
@@ -44,14 +39,11 @@ class Menu_ItemTest extends Kohana_Unittest_TestCase
 		$this->assertEquals($default_item_config['visible'], $menu_item->visible);
 	}
 
-	/**
-	 * Load test menu config
-	 *
-	 * @return array
-	 */
-	private function _get_test_config()
+	public function testItemHasIcon()
 	{
-		$file_path = Kohana::find_file('tests/menu/test_data', 'nav');
-		return require $file_path;
+		foreach ($this->_menu->get_items() as $item) {
+			$this->assertContains($item->icon, (string) $item);
+		}
 	}
+
 }

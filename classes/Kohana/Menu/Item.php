@@ -103,7 +103,8 @@ class Kohana_Menu_Item
 	 */
 	public function remove_class($class)
 	{
-		if ($key = array_search($class, $this->_config['classes'])) {
+		$key = array_search($class, $this->_config['classes']);
+		if ($key !== FALSE) {
 			unset($this->_config['classes'][$key]);
 		}
 		return $this;

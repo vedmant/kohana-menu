@@ -26,7 +26,7 @@ class Kohana_Menu
 	/**
 	 * @var Menu_Item Reference to the currently active menu item
 	 */
-	protected $_active_item;
+	protected $_active_item_index;
 
 	/**
 	 * @param array $config Menu configuration
@@ -113,35 +113,56 @@ class Kohana_Menu
 	 */
 	public function set_current($id = 0)
 	{
-		$item = NULL;
+		$active_item = $this->get_item($id);
 
+		if (! $active_item) {
+			return FALSE;
+		}
+
+		foreach ($this->_items as &$item) {
+			$item->remove_class($this->_config['current_class']);
+		}
+
+		$active_item->add_class($this->_config['current_class']);
+		return $active_item;
+	}
+
+
+	/**
+	 * @since 2.0
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function __get($name)
+	{
+		if (array_key_exists($name, $this->_config)) {
+			return $this->_config[$name];
+		}
+	}
+
+	/**
+	 * Get an instance of Menu_Item based on its ID
+	 *
+	 * @since 2.1.1
+	 * @param int|string $id Item ID or URL
+	 * @return bool|Menu_Item
+	 */
+	public function get_item($id)
+	{
 		// Menu empty!
 		if (count($this->_items) === 0) {
 			return FALSE;
 		}
 
-		if (is_int($id)) { // By ID
-			if (array_key_exists($id, $this->_items)) {
-				$item = $this->_items[$id];
-			}
+		if (array_key_exists($id, $this->_items)) { // By ID
+			return $this->_items[$id];
 		} else { // By URL
-			foreach ($this->_items as $menu_item) {
+			foreach ($this->_items as &$menu_item) {
 				if ($menu_item->url === $id) {
-					$item = $menu_item;
+					return $menu_item;
 				}
 			}
 		}
-
-		// Set item as active
-		if ($item instanceof Menu_Item) { // Item found in the menu
-
-			// Unset old active item
-			if ($this->_active_item instanceof Menu_Item) {
-				$this->_active_item->remove_class($this->_config['current_class']);
-			}
-			return $this->_active_item = $item->add_class($this->_config['current_class']);
-		}
-
 		return FALSE;
 	}
 }
