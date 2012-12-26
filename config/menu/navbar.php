@@ -7,17 +7,6 @@
 return [
 
 	/**
-	 * The view file for the menu.
-	 * Usually just some wrapper (ul) and foreach for menu items (li).
-	 */
-	'view'              => 'templates/menu/bootstrap/navbar',
-
-	/**
-	 * The CSS class used to mark the active menu item
-	 */
-	'active_item_class'     => 'active',
-
-	/**
 	 * Set to TRUE to enable active menu item guessing based on the initial request URI.
 	 * Will sometimes guess wrong, it's safer to manually mark the active link in the controller.
 	 */

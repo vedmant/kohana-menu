@@ -23,7 +23,7 @@ abstract class MenuBuilder extends Kohana_Unittest_TestCase {
 	 * @param string $file_name Navigation config file name (without EXT) in test_data dir
 	 * @return array
 	 */
-	protected static function _get_test_config($file_name = 'nav_complex')
+	protected static function _get_test_config($file_name = 'nav_simple')
 	{
 		$file_path = Kohana::find_file('tests/menu/test_data', $file_name);
 		return require $file_path;

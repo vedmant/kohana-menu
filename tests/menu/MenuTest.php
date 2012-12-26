@@ -41,10 +41,10 @@ class Menu_MenuTest extends MenuBuilder
 
 	public function testActiveLinkIsHighlighted()
 	{
-		$this->_menu->set_current('reports');
+		$this->_menu->set_current('tasks');
 
 		foreach ($this->_menu->get_items() as $item) {
-			if ($item->url !== 'reports') {
+			if ($item->url !== 'tasks') {
 				continue;
 			}
 			$this->assertTrue(in_array($this->_menu->active_item_class, $item->classes));
