@@ -1,16 +1,18 @@
 <?/**
- * Navigation item template for Twitter Bootstrap main navbar
+ * Navigation item template for Twitter Bootstrap main navbar.
  * Render the output inside div.navbar>div.navbar-inner>.container
  *
+ * @link http://twitter.github.com/bootstrap/components.html#navbar
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Ando Roots <ando@sqroot.eu>
+ * @since 2.0
+ * @package Kohana/Menu
+ * @copyright (c) 2012, Ando Roots
  */
 ?>
 <ul class="nav">
 
-	<?foreach ($menu->get_items() as $item):
-	if (! $item->is_visible()):
-		continue;
-	endif;
+	<?foreach ($menu->get_visible_items() as $item):
 
 	// Is this a dropdown-menu with sibling links?
 	if ($item->has_siblings()):?>

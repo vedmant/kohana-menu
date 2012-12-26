@@ -4,10 +4,13 @@ require_once 'MenuBuilder.php';
 /**
  * Test case for Menu_Item
  *
- * @package    Kohana/Menu
- * @group      kohana.menu
- * @category   Test
- * @author     Ando Roots
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ * @author Ando Roots <ando@sqroot.eu>
+ * @since 2.0
+ * @package Kohana/Menu
+ * @category Tests
+ * @group kohana.menu
+ * @copyright (c) 2012, Ando Roots
  */
 class Menu_MenuTest extends MenuBuilder
 {
