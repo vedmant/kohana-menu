@@ -1,11 +1,32 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Represents a single Menu type HTML entity
+ *
+ * @author Ando Roots <ando@sqroot.eu>
  */
 class Kohana_Menu
 {
 
+	/**
+	 * Menu configuration is in this dir
+	 *
+	 * @since 2.2
+	 */
 	const CONFIG_DIR = 'menu';
+
+	/**
+	 * View filename to use when auto-detect fails
+	 *
+	 * @since 3.0
+	 */
+	const DEFAULT_VIEW = 'default';
+
+	/**
+	 * Menu files reside in this dir
+	 *
+	 * @since 3.0
+	 */
+	const VIEWS_DIR = 'templates/menu';
 
 	/**
 	 * @var array Current menu config file
@@ -29,16 +50,25 @@ class Kohana_Menu
 	protected $_active_item_index;
 
 	/**
-	 * @param array $config Menu configuration
-	 * @throws Kohana_Exception
+	 * Initialize a new menu.
+	 * Use the factory method instead of the `new` keyword.
+	 *
+	 * @param array $config Menu configuration, overrides default values
 	 * @see self::factory
 	 */
 	public function __construct(array $config)
 	{
-		$this->_config = $config;
-		$this->_view = View::factory($this->_config['view']);
+		// Save menu config, overriding default values
+		$this->_config = array_replace(self::get_default_config(), $config);
 
-		foreach ($this->_config['items'] as $key => $item) {
+		$this->_view = View::factory($this->get_view_path());
+
+		$this->_build_items(Arr::get($config, 'items', []));
+	}
+
+	private function _build_items(array $items)
+	{
+		foreach ($items as $key => $item) {
 			$this->_items[$key] = new Menu_Item($item, $this);
 		}
 	}
@@ -63,13 +93,23 @@ class Kohana_Menu
 	}
 
 	/**
-	 * @param string $config File name in config/menu/
+	 * @param string $config_file File name in config/menu/
 	 * @throws Kohana_Exception
 	 * @return Menu
 	 */
-	public static function factory($config = 'bootstrap')
+	public static function factory($config_file = 'bootstrap')
 	{
-		return new Menu(self::_get_menu_config($config));
+		// Load menu config
+		$menu_config = self::_get_menu_config($config_file);
+
+		// Auto-detect view path when no view file given
+		if (Arr::get($menu_config, 'view') === NULL) {
+			$view_file = Kohana::find_file('views/'.self::VIEWS_DIR, $config_file)
+				? $config_file : self::DEFAULT_VIEW;
+			$menu_config['view'] = self::VIEWS_DIR.DIRECTORY_SEPARATOR.$view_file;
+		}
+
+		return new Menu($menu_config);
 	}
 
 	/**
@@ -107,6 +147,25 @@ class Kohana_Menu
 	}
 
 	/**
+	 * Get only visible menu items
+	 *
+	 * @return array
+	 * @since 3.0
+	 */
+	public function get_visible_items()
+	{
+		$visible_items = [];
+		foreach ($this->get_items() as $key => $item) {
+			if (! $item->is_visible()) {
+				continue;
+			}
+			$visible_items[$key] = $item;
+		}
+
+		return $visible_items;
+	}
+
+	/**
 	 * @since 2.0
 	 * @param int|string $id The ID of the menu (numerical array ID from the config file) or URL of a menu item
 	 * @return Menu_Item|bool The active menu item or FALSE when item not found
@@ -138,6 +197,7 @@ class Kohana_Menu
 		if (array_key_exists($name, $this->_config)) {
 			return $this->_config[$name];
 		}
+		return NULL;
 	}
 
 	/**
@@ -164,5 +224,25 @@ class Kohana_Menu
 			}
 		}
 		return FALSE;
+	}
+
+	public static function get_default_config()
+	{
+		return [
+			'current_class'     => 'active',
+			'view'              => FALSE,
+			'auto_mark_current' => FALSE,
+		];
+	}
+
+	/**
+	 * Get the path of the view file
+	 *
+	 * @since 3.0
+	 * @return string
+	 */
+	public function get_view_path()
+	{
+		return $this->_config['view'] ? $this->_config['view'] : self::VIEWS_DIR.DIRECTORY_SEPARATOR.self::DEFAULT_VIEW;
 	}
 }

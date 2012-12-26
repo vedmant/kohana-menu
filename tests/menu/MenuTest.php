@@ -68,4 +68,20 @@ class Menu_MenuTest extends MenuBuilder
 			}
 		}
 	}
+
+	public function testMenuConfigurationHasDefaultValues()
+	{
+		$menu = new Menu([]);
+
+		$default_config = Menu::get_default_config();
+
+		foreach ($default_config as $key => $value) {
+			if ($key === 'view') {
+				// Todo View is auto-detected, how to test the factory method?
+				continue;
+			}
+			$this->assertEquals($value, $menu->{$key});
+		}
+	}
+
 }
