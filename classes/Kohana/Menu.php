@@ -116,9 +116,12 @@ class Kohana_Menu
 	}
 
 	/**
+	 * Instantiate a new menu
+	 *
 	 * @param string $config_file File name in config/menu/
 	 * @throws Kohana_Exception
 	 * @return Menu
+	 * @since 2.0
 	 */
 	public static function factory($config_file = 'bootstrap')
 	{
@@ -136,7 +139,10 @@ class Kohana_Menu
 	}
 
 	/**
-	 * @return    string    the rendered view
+	 * Render the menu into HTML
+	 *
+	 * @since 2.0
+	 * @return string the rendered view
 	 */
 	public function render()
 	{
@@ -161,6 +167,8 @@ class Kohana_Menu
 	}
 
 	/**
+	 * Get an array of Menu_Item instances
+	 *
 	 * @since 2.0
 	 * @return array
 	 */
@@ -194,6 +202,8 @@ class Kohana_Menu
 	}
 
 	/**
+	 * Set the currently active menu item (by applying the `active_item_class` CSS class)
+	 *
 	 * @since 2.0
 	 * @param int|string $id The ID of the menu (numerical array ID from the config file) or URL of a menu item
 	 * @return Menu_Item|bool The active menu item or FALSE when item not found
@@ -206,6 +216,7 @@ class Kohana_Menu
 			return FALSE;
 		}
 
+		// Mark all menu items as inactive
 		foreach ($this->_items as &$item) {
 			$item->remove_class($this->_config['active_item_class']);
 		}
@@ -216,8 +227,10 @@ class Kohana_Menu
 
 
 	/**
+	 * Access menu config properties
+	 *
 	 * @since 2.0
-	 * @param string $name
+	 * @param string $name Name of a menu config property
 	 * @return mixed
 	 */
 	public function __get($name)

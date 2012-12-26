@@ -18,7 +18,8 @@ class Kohana_Menu_Item
 	private $_config = [];
 
 	/**
-	 * @var Menu
+	 * @var Menu Reference to the items parent Menu
+	 * @since 2.0
 	 */
 	private $_menu;
 
@@ -58,7 +59,8 @@ class Kohana_Menu_Item
 	}
 
 	/**
-	 * @return mixed Rendered menu item content (typically a link)
+	 * @return string HTML anchor
+	 * @since 2.0
 	 */
 	public function __toString()
 	{
@@ -114,7 +116,10 @@ class Kohana_Menu_Item
 	}
 
 	/**
-	 * @return bool
+	 * Check if the menu item is visible (rendered).
+	 * Use case example: can be used to hide the admin link from unauthorized users.
+	 *
+	 * @return bool True if the item is visible
 	 * @since 2.1
 	 */
 	public function is_visible()
@@ -123,6 +128,8 @@ class Kohana_Menu_Item
 	}
 
 	/**
+	 * Access menu item config
+	 *
 	 * @since 2.0
 	 * @param string $name
 	 * @return mixed
