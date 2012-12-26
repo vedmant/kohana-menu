@@ -3,15 +3,10 @@
  * Minimalistic menu config example.
  * Renders a simple list (<li>) of links.
  *
+ * @see https://github.com/anroots/kohana-menu/wiki/Configuration-files
  * @author Ando Roots <ando@sqroot.eu>
  */
 return [
-
-	/**
-	 * A list of menu items.
-	 * All params are optional.
-	 * For a list of available keys, see https://github.com/anroots/kohana-menu/wiki/Configuration-files
-	 */
 	'items'             => [
 		[
 			'url'     => 'issues',

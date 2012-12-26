@@ -49,7 +49,7 @@ return [
 	 * Set to TRUE to enable active menu item guessing based on the initial request URI.
 	 * Will sometimes guess wrong, it's safer to manually mark the active link in the controller.
 	 */
-	'auto_mark_current' => FALSE,
+	'guess_active_item' => FALSE,
 
 	/**
 	 * A list of menu items. All params are optional.

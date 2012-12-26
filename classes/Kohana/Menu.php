@@ -136,6 +136,11 @@ class Kohana_Menu
 	 */
 	public function render()
 	{
+		// Try to guess the current active menu item
+		if ($this->_config['guess_active_item'] && $this->_active_item_index === NULL) {
+			$this->guess_active_item(Request::current());
+		}
+
 		return $this->_view
 			->set('menu', $this)
 			->render();
@@ -148,11 +153,6 @@ class Kohana_Menu
 	 */
 	public function __toString()
 	{
-		// Try to guess the current active menu item
-		if (array_key_exists('auto_mark_current', $this->_config) && $this->_config['auto_mark_current']) {
-			$this->set_current(Request::current()->uri());
-		}
-
 		return $this->render();
 	}
 
@@ -173,8 +173,13 @@ class Kohana_Menu
 	 */
 	public function get_visible_items()
 	{
+		if ($this->_items === NULL) {
+			return [];
+		}
+
 		$visible_items = [];
-		foreach ($this->get_items() as $key => $item) {
+
+		foreach ($this->_items as $key => $item) {
 			if (! $item->is_visible()) {
 				continue;
 			}
@@ -245,12 +250,16 @@ class Kohana_Menu
 		return FALSE;
 	}
 
+	/**
+	 * @return array Default configuration for the menu
+	 * @since 3.0
+	 */
 	public static function get_default_config()
 	{
 		return [
-			'active_item_class'     => 'active',
+			'active_item_class' => 'active',
 			'view'              => FALSE,
-			'auto_mark_current' => FALSE,
+			'guess_active_item' => FALSE,
 		];
 	}
 
@@ -263,5 +272,17 @@ class Kohana_Menu
 	public function get_view_path()
 	{
 		return $this->_config['view'] ? $this->_config['view'] : self::VIEWS_DIR.DIRECTORY_SEPARATOR.self::DEFAULT_VIEW;
+	}
+
+	/**
+	 * Set the active link based on the current request
+	 *
+	 * @since 3.0
+	 * @param Request $request
+	 * @return bool|\Menu_Item
+	 */
+	public function guess_active_item(Request $request)
+	{
+		return $this->set_current($request->uri());
 	}
 }

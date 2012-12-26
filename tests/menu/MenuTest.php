@@ -84,4 +84,25 @@ class Menu_MenuTest extends MenuBuilder
 		}
 	}
 
+	public function testCorrectLinkIsAutomaticallyMarkedAsActive()
+	{
+		// Make a dummy request to populate Request::current()
+		Request::$current = Request::factory('tasks', array(), FALSE);
+
+		$menu_config = self::_get_test_config();
+		$menu_config['guess_active_item'] = TRUE;
+
+		$menu = new Menu($menu_config);
+		$menu->render();
+
+		// Check that an item was marked as active
+		$menu_items = $menu->get_items();
+
+		foreach ($menu_items as $item) {
+			if ($item->url === 'tasks') {
+				$this->assertTrue(in_array('active', $item->classes));
+			}
+		}
+	}
+
 }
