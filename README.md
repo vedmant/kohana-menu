@@ -29,8 +29,9 @@ return [
 
 You define your menus in Kohana configuration files
 (see [config/menu/navbar.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/navbar.php)).
-Then, in your (main) controller (or view), you determine which menu configuration to use (based on user role or other factors),
- construct a new Menu object, set the active link and render it in your template. Done.
+Then, in your (main) controller (or template), you construct a new Menu object, set the active link and render it in your template. Done.
+
+### Example use case
 
 A WordPress type blog might have...
 
@@ -65,7 +66,7 @@ git clone git://github.com/anroots/kohana-menu.git modules/menu
 }
 ```
 
-### Copy the `MODPATH.menu/config/menu/navbar.php` into `APPPATH/config/menu/navbar.php` and customize
+### Copy `MODPATH.menu/config/menu/navbar.php` into `APPPATH/config/menu/navbar.php` and customize
 
 ### Activate the module in `bootstrap.php`.
 
