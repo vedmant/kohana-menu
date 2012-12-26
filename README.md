@@ -13,7 +13,8 @@ Simplify rendering, building and maintenance of simple, dynamic navigation menus
 
 ## Basics
 
-You define your menus in Kohana configuration files (see [config/menu/bootstrap.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/bootstrap.php)).
+You define your menus in Kohana configuration files
+(see [config/menu/navbar.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/navbar.php)).
 Then, in your (main) controller (or view), you determine which menu configuration to use (based on user role or other factors),
 use the factory method to construct a new Menu object, set the active link and render it in your view. Done.
 
@@ -85,7 +86,7 @@ return [
 <?php
 // APPPATH/views/template.php
 
-echo Menu::factory('bootstrap')->render();
+echo Menu::factory('navbar')->render();
 // echo Menu::factory()
 ```
 
@@ -110,13 +111,13 @@ git clone git://github.com/anroots/kohana-menu.git modules/menu
 }
 ```
 
-### Create a folder `menu` in your applications config directory, copy the `menu/bootstrap.php` into it,
+### Create a folder `menu` in your applications config directory, copy the `menu/navbar.php` into it,
 and adjust it to fit your navigation.
 
 ```bash
 mkdir -p application/config/menu
-cp modules/menu/config/menu/bootstrap.php application/config/menu/bootstrap.php
-# edit application/config/menu/bootstrap.php
+cp modules/menu/config/menu/navbar.php application/config/menu/navbar.php
+# edit application/config/menu/navbar.php
 ```
 
 ### Activate the module in the `bootstrap.php` file.
