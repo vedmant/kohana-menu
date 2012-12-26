@@ -15,7 +15,6 @@ return [
 		[
 			'url'     => 'tasks',
 			'title'   => 'nav.tasks',
-			'icon'    => 'icon-dash',
 			'tooltip' => 'nav.tooltip.tasks'
 		],
 	],

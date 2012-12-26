@@ -5,15 +5,18 @@ abstract class MenuBuilder extends Kohana_Unittest_TestCase {
 	 */
 	protected $_menu;
 
+	protected $_nav_simple;
+
 	public function setUp()
 	{
 		parent::setUp();
+		$this->_nav_simple = self::_get_test_config();
 		$this->_menu = $this->_build_test_menu();
 	}
 
 	protected function _build_test_menu()
 	{
-		return new Menu(self::_get_test_config());
+		return new Menu($this->_nav_simple);
 	}
 
 

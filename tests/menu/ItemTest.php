@@ -41,8 +41,19 @@ class Menu_ItemTest extends MenuBuilder
 
 	public function testItemHasIcon()
 	{
-		foreach ($this->_menu->get_items() as $item) {
-			$this->assertContains($item->icon, (string) $item);
+		foreach ($this->_menu->get_items() as $key => $item) {
+			if (array_key_exists('icon', $this->_nav_simple['items'][$key])) {
+				$this->assertContains($item->icon, (string) $item);
+			}
+		}
+	}
+
+	public function testIconIsIgnoredWhenEmpty()
+	{
+		foreach ($this->_menu->get_items() as $key => $item) {
+			if (! array_key_exists('icon', $this->_nav_simple['items'][$key])) {
+				$this->assertFalse(stristr((string) $item, '<i class'));
+			}
 		}
 	}
 

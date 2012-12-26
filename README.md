@@ -1,6 +1,6 @@
 # HTML Navigation Module for Kohana 3.3
 
-Simplify rendering, building and maintenance of simple, dynamic navigation menus. We don't want _this_ in our HTML.
+Simplify rendering, building and maintenance of simple, dynamic standardised navigation menus. Instead of...
 
 ```php
 <? if ($user->get_role() === Role::ANONYMOUS):?>
@@ -10,13 +10,27 @@ Simplify rendering, building and maintenance of simple, dynamic navigation menus
 </ul>
 <? // elseif (...)?>
 ```
+... we do this:
+```php
+<?
+return [
+'items' => [
+            'url'     => 'home',
+            'title'   => 'Home',
+        ],
+        [
+            'url'     => 'about',
+            'title'   => 'About',
+        ],
+];
+```
 
 ## Basics
 
 You define your menus in Kohana configuration files
 (see [config/menu/navbar.php](https://github.com/anroots/kohana-menu/blob/master/config/menu/navbar.php)).
 Then, in your (main) controller (or view), you determine which menu configuration to use (based on user role or other factors),
-use the factory method to construct a new Menu object, set the active link and render it in your view. Done.
+ construct a new Menu object, set the active link and render it in your template. Done.
 
 A WordPress type blog might have...
 
@@ -29,66 +43,6 @@ Normally, you'd build HTML views with `ul` and `li` elements and then write some
 difficult to maintain (DRY) and too much hassle (not to mention ugly).
 
 Instead, describe your (standardised) menus in configuration files and have Kohana do the heavy lifting.
-
-```php
-<?php defined('SYSPATH' OR die('No direct access allowed.'));
-return [
-
-	/**
-	 * The view file for the menu.
-	 * Usually just some wrapper (ul) and foreach for menu items (li).
-	 */
-	'view'              => 'templates/menu/bootstrap/navbar',
-
-	/**
-	 * The CSS class used to mark the active menu item
-	 */
-	'active_item_class'     => 'active',
-
-	/**
-	 * Set to TRUE to enable active menu item guessing based on the initial request URI.
-	 * Will sometimes guess wrong, it's safer to manually mark the active link in the controller.
-	 */
-	'guess_active_item' => FALSE,
-
-	/**
-	 * A list of menu items. All params are optional.
-	 *
-	 * Params:
-	 *     classes array An array of CSS classes to apply to the menu item container
-	 *     url string The URL for the link, default #
-	 *     title string The displayed text string, I18n is applied
-	 *     icon string Icon for the menu item, displayed as <i class="VALUE"></i>
-	 *     items array Nested (dropdown) menu configuration
-	 *     tooltip string The tooltip text for the link, I18n is applied
-	 *     visible bool Whether the menu item is currently shown. Default TRUE
-	 */
-	'items'             => [
-		[
-			'url'     => 'issues',
-			'title'   => 'nav.issues',
-			'icon'    => 'icon-tasks',
-			'tooltip' => 'nav.tooltip.issues'
-		],
-		[
-			'url'     => 'tasks',
-			'title'   => 'nav.tasks',
-			'icon'    => 'icon-dash',
-			'tooltip' => 'nav.tooltip.tasks'
-		],
-	],
-];
-```
-
-### Example, rendering the default menu
-
-```php
-<?php
-// APPPATH/views/template.php
-
-echo Menu::factory('navbar')->render();
-// echo Menu::factory()
-```
 
 ## Installation
 
@@ -111,16 +65,9 @@ git clone git://github.com/anroots/kohana-menu.git modules/menu
 }
 ```
 
-### Create a folder `menu` in your applications config directory, copy the `menu/navbar.php` into it,
-and adjust it to fit your navigation.
+### Copy the `MODPATH.menu/config/menu/navbar.php` into `APPPATH/config/menu/navbar.php` and customize
 
-```bash
-mkdir -p application/config/menu
-cp modules/menu/config/menu/navbar.php application/config/menu/navbar.php
-# edit application/config/menu/navbar.php
-```
-
-### Activate the module in the `bootstrap.php` file.
+### Activate the module in `bootstrap.php`.
 
 ```php
 <?php
@@ -130,13 +77,13 @@ Kohana::modules(array(
 ));
 ```
 
-### Echo the output in your template
+### Echo menu output in your template
 
 ```html
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<div class="container">
-			<?=(string)Menu::factory()?>
+			<?=(string)Menu::factory('navbar')?>
 		</div>
 	</div>
 </div>
@@ -157,11 +104,15 @@ You can use different config files by setting the factory's `$config` parameter.
 
 ## Marking the current menu item
 
-The config setting `active_item_class` defines the css class, which will be used by the `set_current()` method, to mark the current menu item:
+Use `set_current()` to mark the current menu item in your controller
 ```php
 	$menu->set_current('article/show');
 ```
-The parameter of `set_current()` is the URL value of the respective item or its ID.
+The parameter of `set_current()` is the URL value of the respective item or its (numeric) array key
+
+# Documentation
+
+The code is mostly commented and more help can be found [on the Wiki](https://github.com/anroots/kohana-menu/wiki).
 
 # Licence
 
