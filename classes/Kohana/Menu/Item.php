@@ -7,6 +7,7 @@
  * @since 2.0
  * @package Kohana/Menu
  * @copyright (c) 2012, Ando Roots
+ * @property string classes
  */
 class Kohana_Menu_Item
 {
@@ -167,4 +168,15 @@ class Kohana_Menu_Item
 		];
 	}
 
+	/**
+	 * Get classes applied to this item.
+	 * This includes the active class (if present) and additional classes set by the user
+	 *
+	 * @since 3.0.1
+	 * @return string Space-separated list of CSS classes
+	 */
+	public function get_classes()
+	{
+		return implode(' ', $this->_config['classes']);
+	}
 }

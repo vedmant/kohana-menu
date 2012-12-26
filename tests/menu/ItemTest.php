@@ -60,4 +60,11 @@ class Menu_ItemTest extends MenuBuilder
 		}
 	}
 
+	public function testAdditionalClassesCanBeAddedFromConfig()
+	{
+		$config['items'][0]['classes'] = ['testClass'];
+		$menu = new Menu($config);
+		$this->assertTrue(in_array('testClass', $menu->get_item(0)->classes));
+	}
+
 }
