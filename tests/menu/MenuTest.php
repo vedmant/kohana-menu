@@ -47,7 +47,7 @@ class Menu_MenuTest extends MenuBuilder
 			if ($item->url !== 'reports') {
 				continue;
 			}
-			$this->assertTrue(in_array($this->_menu->current_class, $item->classes));
+			$this->assertTrue(in_array($this->_menu->active_item_class, $item->classes));
 		}
 	}
 
@@ -60,7 +60,7 @@ class Menu_MenuTest extends MenuBuilder
 		$this->_menu->set_current(1);
 
 		foreach ($this->_menu->get_items() as $index => $item) {
-			$is_item_active = in_array($this->_menu->current_class, $item->classes);
+			$is_item_active = in_array($this->_menu->active_item_class, $item->classes);
 			if ($index === 1) {
 				$this->assertTrue($is_item_active);
 			} else {

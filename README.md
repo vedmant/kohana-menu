@@ -43,7 +43,7 @@ return [
 	/**
 	 * The CSS class used to mark the active menu item
 	 */
-	'current_class'     => 'active',
+	'active_item_class'     => 'active',
 
 	/**
 	 * Set to TRUE to enable active menu item guessing based on the initial request URI.
@@ -157,7 +157,7 @@ You can use different config files by setting the factory's `$config` parameter.
 
 ## Marking the current menu item
 
-The config setting `current_class` defines the css class, which will be used by the `set_current()` method, to mark the current menu item:
+The config setting `active_item_class` defines the css class, which will be used by the `set_current()` method, to mark the current menu item:
 ```php
 	$menu->set_current('article/show');
 ```

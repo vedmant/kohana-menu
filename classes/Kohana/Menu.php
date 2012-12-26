@@ -22,19 +22,19 @@ class Kohana_Menu
 	const DEFAULT_VIEW = 'default';
 
 	/**
-	 * Menu files reside in this dir
+	 * Menu view files reside in this dir
 	 *
 	 * @since 3.0
 	 */
 	const VIEWS_DIR = 'templates/menu';
 
 	/**
-	 * @var array Current menu config file
+	 * @var array Holds current menu configuration
 	 */
 	protected $_config;
 
 	/**
-	 * @var View Current menu view
+	 * @var View Menu view object
 	 */
 	protected $_view;
 
@@ -45,7 +45,7 @@ class Kohana_Menu
 	protected $_items;
 
 	/**
-	 * @var Menu_Item Reference to the currently active menu item
+	 * @var int Reference to the currently active menu item
 	 */
 	protected $_active_item_index;
 
@@ -58,19 +58,38 @@ class Kohana_Menu
 	 */
 	public function __construct(array $config)
 	{
+		$menu_items = [];
+		if (array_key_exists('items', $config)) {
+			$menu_items = $config['items'];
+
+			// We don't want to save this to $this->_config
+			unset($config['items']);
+		}
+
 		// Save menu config, overriding default values
 		$this->_config = array_replace(self::get_default_config(), $config);
 
+		// Load menu view (auto detected or manually specified)
 		$this->_view = View::factory($this->get_view_path());
 
-		$this->_build_items(Arr::get($config, 'items', []));
+		// Transform menu items from an array to objects
+		$this->_build_items($menu_items);
 	}
 
+	/**
+	 * Transform menu items from an array to objects
+	 *
+	 * @since 3.0
+	 * @param array $items An array of menu items
+	 * @return \Kohana_Menu
+	 */
 	private function _build_items(array $items)
 	{
 		foreach ($items as $key => $item) {
 			$this->_items[$key] = new Menu_Item($item, $this);
 		}
+
+		return $this;
 	}
 
 	/**
@@ -179,10 +198,10 @@ class Kohana_Menu
 		}
 
 		foreach ($this->_items as &$item) {
-			$item->remove_class($this->_config['current_class']);
+			$item->remove_class($this->_config['active_item_class']);
 		}
 
-		$active_item->add_class($this->_config['current_class']);
+		$active_item->add_class($this->_config['active_item_class']);
 		return $active_item;
 	}
 
@@ -229,7 +248,7 @@ class Kohana_Menu
 	public static function get_default_config()
 	{
 		return [
-			'current_class'     => 'active',
+			'active_item_class'     => 'active',
 			'view'              => FALSE,
 			'auto_mark_current' => FALSE,
 		];
