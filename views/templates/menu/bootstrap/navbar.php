@@ -25,7 +25,7 @@
 			</a>
 			<ul class="dropdown-menu">
 				<?foreach ($item->siblings as $subitem): ?>
-				<li>
+				<li class="<?=$subitem->get_classes()?>">
 					<?=(string) $subitem?>
 				</li>
 				<? endforeach?>

@@ -60,20 +60,35 @@ class Kohana_Menu_Item
 	}
 
 	/**
-	 * @return string HTML anchor
-	 * @since 2.0
-	 */
+	* @return string HTML anchor
+	* @since 2.0
+	*/
 	public function __toString()
 	{
-		return HTML::anchor(
-			$this->_config['url'],
-			$this->_config['title'],
-			[
-				'title' => $this->_config['tooltip']
-			],
-			NULL,
-			FALSE
-		);
+		// Both link text and URL is empty
+		if ($this->is_link_empty()) {
+			return '';
+		}
+
+        	return HTML::anchor(
+            	$this->_config['url'],
+            	$this->_config['title'],
+            	[
+                	'title' => $this->_config['tooltip']
+            	],
+            	null,
+            	false
+        	);
+	}
+
+	/**
+	* @since 3.0.2
+	* @return bool TRUE if the link has no title and URL
+	*/
+	public function is_link_empty()
+	{
+		return $this->_config['url'] === static::get_default_config()['url']
+		&& $this->_config['title'] === static::get_default_config()['title'];
 	}
 
 	/**
