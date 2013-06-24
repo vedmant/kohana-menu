@@ -18,7 +18,8 @@ return [
 			'url'     => 'users',
 			'title'   => 'nav.persons',
 			'icon'    => 'icon-user',
-			'tooltip' => 'nav.tooltip.persons'
+			'tooltip' => 'nav.tooltip.persons',
+			'attributes'=> ['data-method' => 'ajax']
 		],
 		[
 			'url'     => 'projects',
