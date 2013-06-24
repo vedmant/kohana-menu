@@ -16,7 +16,6 @@ class Kohana_Menu_Item {
 	 * @since 2.0
 	 */
 	private $_config = [];
-
 	/**
 	 * @var Menu Reference to the items parent Menu
 	 * @since 2.0
@@ -59,6 +58,33 @@ class Kohana_Menu_Item {
 	}
 
 	/**
+	 * @return array
+	 * @since 2.1
+	 */
+	public static function get_default_config()
+	{
+		return [
+			'classes'    => [], // Extra classes for this menu item
+			'icon'       => NULL, // Icon class for this menu item
+			'siblings'   => [], // Sub-links
+			'title'      => NULL, // Visible text
+			'tooltip'    => NULL, // Tooltip text for this menu item
+			'url'        => '#', // Relative or absolute target for this menu item (href)
+			'visible'    => TRUE, // Menu item is rendered
+			'attributes' => [] // Extra HTML attributes for the <li> element, assoc array
+		];
+	}
+
+	/**
+	 * @return string HTML for the link icon
+	 * @since 2.1
+	 */
+	private function _render_icon()
+	{
+		return '<i class="'.$this->_config["icon"].'"></i> ';
+	}
+
+	/**
 	 * @return string HTML anchor
 	 * @since 2.0
 	 */
@@ -69,12 +95,17 @@ class Kohana_Menu_Item {
 			return '';
 		}
 
-		return HTML::anchor(
-			$this->_config['url'],
-			$this->_config['title'],
+		$attributes = array_replace(
 			[
 				'title' => $this->_config['tooltip']
 			],
+			$this->_config['attributes']
+		);
+
+		return HTML::anchor(
+			$this->_config['url'],
+			$this->_config['title'],
+			$attributes,
 			NULL,
 			FALSE
 		);
@@ -154,32 +185,6 @@ class Kohana_Menu_Item {
 		if (array_key_exists($name, $this->_config)) {
 			return $this->_config[$name];
 		}
-	}
-
-	/**
-	 * @return string HTML for the link icon
-	 * @since 2.1
-	 */
-	private function _render_icon()
-	{
-		return '<i class="'.$this->_config["icon"].'"></i> ';
-	}
-
-	/**
-	 * @return array
-	 * @since 2.1
-	 */
-	public static function get_default_config()
-	{
-		return [
-			'classes'  => [], // Extra classes for this menu item
-			'icon'     => NULL, // Icon class for this menu item
-			'siblings' => [], // Sub-links
-			'title'    => NULL, // Visible text
-			'tooltip'  => NULL, // Tooltip text for this menu item
-			'url'      => '#', // Relative or absolute target for this menu item (href)
-			'visible'  => TRUE
-		];
 	}
 
 	/**

@@ -66,4 +66,19 @@ class Menu_ItemTest extends MenuBuilder {
 		$this->assertTrue(in_array('testClass', $menu->get_item(0)->classes));
 	}
 
+	/**
+	 * @group m1
+	 */
+	public function testAdditionalAttributeCanBeAddedToMenuItemsFromConfig()
+	{
+		$config['items'][0] = [
+			'attributes' => ['data-id' => '5'],
+			'url'       => 'test'
+		];
+
+		$menu = new Menu($config);
+		$this->assertContains('data-id="5"', $menu->render());
+	}
+
+
 }
