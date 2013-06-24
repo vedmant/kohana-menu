@@ -5,7 +5,7 @@
  * @author Ando Roots <ando@sqroot.eu>
  */
 return [
-	'items'             => [
+	'items' => [
 		[
 			'url'     => 'issues',
 			'title'   => 'nav.issues',

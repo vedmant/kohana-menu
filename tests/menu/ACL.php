@@ -10,8 +10,7 @@
  * @group kohana.menu
  * @copyright (c) 2012, Ando Roots
  */
-class Menu_ACL
-{
+class Menu_ACL {
 
 	public static $is_admin;
 

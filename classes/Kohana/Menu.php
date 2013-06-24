@@ -8,8 +8,7 @@
  * @package Kohana/Menu
  * @copyright (c) 2012, Ando Roots
  */
-class Kohana_Menu
-{
+class Kohana_Menu {
 
 	/**
 	 * Menu configuration is in this dir
@@ -257,7 +256,8 @@ class Kohana_Menu
 
 		if (array_key_exists($id, $this->_items)) { // By ID
 			return $this->_items[$id];
-		} else { // By URL
+		}
+		else { // By URL
 			foreach ($this->_items as &$menu_item) {
 				if ($menu_item->url === $id) {
 					return $menu_item;

@@ -7,11 +7,11 @@
  * @author Ando Roots <ando@sqroot.eu>
  */
 return [
-	'items'             => [
+	'items' => [
 		[
-			'url'     => 'issues',
-			'title'   => 'nav.issues',
-			'icon'    => 'icon-tasks',
+			'url'   => 'issues',
+			'title' => 'nav.issues',
+			'icon'  => 'icon-tasks',
 		],
 		[
 			'url'     => 'users',
@@ -20,9 +20,9 @@ return [
 			'tooltip' => 'nav.tooltip.persons'
 		],
 		[
-			'url'     => 'projects',
-			'icon'    => 'icon-folder-close',
-			'title'   => 'nav.projects',
+			'url'   => 'projects',
+			'icon'  => 'icon-folder-close',
+			'title' => 'nav.projects',
 		],
 	],
 ];

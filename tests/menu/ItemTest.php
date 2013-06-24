@@ -12,8 +12,7 @@ require_once 'MenuBuilder.php';
  * @group kohana.menu
  * @copyright (c) 2012, Ando Roots
  */
-class Menu_ItemTest extends MenuBuilder
-{
+class Menu_ItemTest extends MenuBuilder {
 
 	public function testLabelsAreTranslated()
 	{

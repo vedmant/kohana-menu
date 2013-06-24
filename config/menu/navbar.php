@@ -7,7 +7,7 @@
  */
 return [
 
-	'items'             => [
+	'items' => [
 		[
 			'url'     => 'issues',
 			'title'   => 'nav.issues',

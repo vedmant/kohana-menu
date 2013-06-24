@@ -7,11 +7,8 @@
 return [
 
 	'view'              => 'templates/menu/bootstrap/navbar',
-
-	'active_item_class'     => 'active',
-
+	'active_item_class' => 'active',
 	'guess_active_item' => FALSE,
-
 	'items'             => [
 		[
 			'url'     => 'issues',

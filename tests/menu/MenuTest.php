@@ -12,8 +12,7 @@ require_once 'MenuBuilder.php';
  * @group kohana.menu
  * @copyright (c) 2012, Ando Roots
  */
-class Menu_MenuTest extends MenuBuilder
-{
+class Menu_MenuTest extends MenuBuilder {
 
 	public function testAllMenuItemsAreBuilt()
 	{
@@ -66,7 +65,8 @@ class Menu_MenuTest extends MenuBuilder
 			$is_item_active = in_array($this->_menu->active_item_class, $item->classes);
 			if ($index === 1) {
 				$this->assertTrue($is_item_active);
-			} else {
+			}
+			else {
 				$this->assertFalse($is_item_active);
 			}
 		}

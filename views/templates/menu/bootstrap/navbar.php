@@ -15,31 +15,32 @@
 
 	<?foreach ($menu->get_visible_items() as $item):
 
-	// Is this a dropdown-menu with sibling links?
-	if ($item->has_siblings()):?>
+		// Is this a dropdown-menu with sibling links?
+		if ($item->has_siblings()):?>
 
-		<li class="dropdown  <?=$item->get_classes()?>" title="<?=$item->tooltip?>">
-			<a href="#"
-			   class="dropdown-toggle"
-			   data-toggle="dropdown"><?=$item->title?><b class="caret"></b>
-			</a>
-			<ul class="dropdown-menu">
-				<?foreach ($item->siblings as $subitem): ?>
-				<li class="<?=$subitem->get_classes()?>">
-					<?=(string) $subitem?>
-				</li>
-				<? endforeach?>
-			</ul>
-		</li>
+			<li class="dropdown  <?= $item->get_classes() ?>" title="<?= $item->tooltip ?>">
+				<a href="#"
+				   class="dropdown-toggle"
+				   data-toggle="dropdown"><?= $item->title ?><b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<? foreach ($item->siblings as $subitem): ?>
+						<li class="<?= $subitem->get_classes() ?>">
+							<?= (string) $subitem ?>
+						</li>
+					<? endforeach ?>
+				</ul>
+			</li>
 
-		<? else:
-		// No, this is a "normal", single-level menu
-		?>
-		<li class="<?=$item->get_classes()?>">
-			<?=(string) $item?>
-		</li>
+		<?
+		else:
+			// No, this is a "normal", single-level menu
+			?>
+			<li class="<?= $item->get_classes() ?>">
+				<?= (string) $item ?>
+			</li>
 
 		<? endif ?>
 
-	<? endforeach?>
+	<? endforeach ?>
 </ul>

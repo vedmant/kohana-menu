@@ -9,8 +9,7 @@
  * @copyright (c) 2012, Ando Roots
  * @property string classes
  */
-class Kohana_Menu_Item
-{
+class Kohana_Menu_Item {
 
 	/**
 	 * @var array Current item config
@@ -60,9 +59,9 @@ class Kohana_Menu_Item
 	}
 
 	/**
-	* @return string HTML anchor
-	* @since 2.0
-	*/
+	 * @return string HTML anchor
+	 * @since 2.0
+	 */
 	public function __toString()
 	{
 		// Both link text and URL is empty
@@ -70,21 +69,21 @@ class Kohana_Menu_Item
 			return '';
 		}
 
-        	return HTML::anchor(
-            	$this->_config['url'],
-            	$this->_config['title'],
-            	[
-                	'title' => $this->_config['tooltip']
-            	],
-            	null,
-            	false
-        	);
+		return HTML::anchor(
+			$this->_config['url'],
+			$this->_config['title'],
+			[
+				'title' => $this->_config['tooltip']
+			],
+			NULL,
+			FALSE
+		);
 	}
 
 	/**
-	* @since 3.0.2
-	* @return bool TRUE if the link has no title and URL
-	*/
+	 * @since 3.0.2
+	 * @return bool TRUE if the link has no title and URL
+	 */
 	public function is_link_empty()
 	{
 		return $this->_config['url'] === static::get_default_config()['url']
