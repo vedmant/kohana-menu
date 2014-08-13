@@ -61,7 +61,7 @@ class Kohana_Menu {
 	 */
 	public function __construct(array $config)
 	{
-		$menu_items = [];
+		$menu_items = array();
 		if (array_key_exists('items', $config)) {
 			$menu_items = $config['items'];
 
@@ -71,7 +71,7 @@ class Kohana_Menu {
 
 		// Save menu config, overriding default values
 		$this->_config = array_replace(self::get_default_config(), $config);
-
+        
 		// Load menu view (auto detected or manually specified)
 		$this->_view = View::factory($this->get_view_path());
 
@@ -105,9 +105,9 @@ class Kohana_Menu {
 	protected static function _get_menu_config($config)
 	{
 		if (Kohana::find_file('config'.DIRECTORY_SEPARATOR.self::CONFIG_DIR, $config) === FALSE) {
-			throw new Kohana_Exception('Menu configuration file ":path" not found!', [
+			throw new Kohana_Exception('Menu configuration file ":path" not found!', array(
 				':path' => APPPATH.'config'.DIRECTORY_SEPARATOR.self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config.EXT
-			]);
+			));
 		}
 
 		return Kohana::$config->load(self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config)
@@ -126,7 +126,7 @@ class Kohana_Menu {
 	{
 		// Load menu config
 		$menu_config = self::_get_menu_config($config_file);
-
+        
 		// Auto-detect view path when no view file given
 		if (Arr::get($menu_config, 'view') === NULL) {
 			$view_file = Kohana::find_file('views/'.self::VIEWS_DIR, $config_file)
@@ -185,10 +185,10 @@ class Kohana_Menu {
 	public function get_visible_items()
 	{
 		if ($this->_items === NULL) {
-			return [];
+			return array();
 		}
 
-		$visible_items = [];
+		$visible_items = array();
 
 		foreach ($this->_items as $key => $item) {
 			if (! $item->is_visible()) {
@@ -273,11 +273,11 @@ class Kohana_Menu {
 	 */
 	public static function get_default_config()
 	{
-		return [
+		return array(
 			'active_item_class' => 'active',
 			'view'              => FALSE,
 			'guess_active_item' => FALSE,
-		];
+		);
 	}
 
 	/**
