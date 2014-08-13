@@ -97,6 +97,11 @@ before it's rendered.
 
 You can use different config files by setting the factory's `$config` parameter.
 
+The `view` key of the config files sets the [view file](http://kohanaframework.org/3.3/guide/kohana/mvc/views) that will be used to render the menu.
+It defaults to a view file based on the `$config` parameter: `/views/templates/menu/$config`
+and if that does not exist falls back on the included `/views/templates/menu/default` view file.
+For an example, see the included `navbar.php` config file.
+
 ### Example: Load menu configuration based on user role
 
 ```php

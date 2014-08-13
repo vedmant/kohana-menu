@@ -122,7 +122,7 @@ class Kohana_Menu {
 	 * @return Menu
 	 * @since 2.0
 	 */
-	public static function factory($config_file = 'bootstrap')
+	public static function factory($config_file = 'simple')
 	{
 		// Load menu config
 		$menu_config = self::_get_menu_config($config_file);

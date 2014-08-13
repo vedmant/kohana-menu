@@ -12,11 +12,10 @@
 ?>
 <nav>
 	<ul>
-		<? foreach ($menu->get_visible_items() as $item): ?>
-
+		<?php foreach ($menu->get_visible_items() as $item): ?>
 			<li class="<?= $item->get_classes() ?>">
 				<?= (string) $item ?>
 			</li>
-		<? endforeach ?>
+		<?php endforeach ?>
 	</ul>
 </nav>
