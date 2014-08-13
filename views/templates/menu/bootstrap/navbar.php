@@ -13,7 +13,7 @@
 ?>
 <ul class="nav">
 
-	<?foreach ($menu->get_visible_items() as $item):
+	<?php foreach ($menu->get_visible_items() as $item):
 
 		// Is this a dropdown-menu with sibling links?
 		if ($item->has_siblings()):?>
@@ -24,15 +24,15 @@
 				   data-toggle="dropdown"><?= $item->title ?><b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu">
-					<? foreach ($item->siblings as $subitem): ?>
+					<?php foreach ($item->siblings as $subitem): ?>
 						<li class="<?= $subitem->get_classes() ?>">
 							<?= (string) $subitem ?>
 						</li>
-					<? endforeach ?>
+					<?php endforeach ?>
 				</ul>
 			</li>
 
-		<?
+		<?php
 		else:
 			// No, this is a "normal", single-level menu
 			?>
@@ -40,7 +40,7 @@
 				<?= (string) $item ?>
 			</li>
 
-		<? endif ?>
+		<?php endif ?>
 
-	<? endforeach ?>
+	<?php endforeach ?>
 </ul>

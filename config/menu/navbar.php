@@ -6,7 +6,7 @@
  * @author Ando Roots <ando@sqroot.eu>
  */
 return [
-
+	'view' => 'templates/menu/bootstrap/navbar',
 	'items' => [
 		[
 			'url'     => 'issues',
