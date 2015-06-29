@@ -52,7 +52,7 @@ class Kohana_Menu_Item {
 		// Sub-menu
 		if (array_key_exists('items', $item_config) && count($item_config['items']) > 0) {
 			foreach ($item_config['items'] as $sibling) {
-				$this->_config['siblings'][] = new Menu_Item($sibling, $menu);
+				$this->_config['children'][] = new Menu_Item($sibling, $menu);
 			}
 		}
 	}
@@ -64,9 +64,10 @@ class Kohana_Menu_Item {
 	public static function get_default_config()
 	{
 		return [
+			'custom'     => '', // Fully html custom menu item
 			'classes'    => [], // Extra classes for this menu item
 			'icon'       => NULL, // Icon class for this menu item
-			'siblings'   => [], // Sub-links
+			'children'   => [], // Sub-links
 			'title'      => NULL, // Visible text
 			'tooltip'    => NULL, // Tooltip text for this menu item
 			'url'        => '#', // Relative or absolute target for this menu item (href)
@@ -123,11 +124,11 @@ class Kohana_Menu_Item {
 
 	/**
 	 * @since 2.0
-	 * @return bool Whether the current menu item has siblings (sub-items)
+	 * @return bool Whether the current menu item has children (sub-items)
 	 */
-	public function has_siblings()
+	public function has_children()
 	{
-		return count($this->_config['siblings']) > 0;
+		return count($this->_config['children']) > 0;
 	}
 
 	/**
@@ -197,5 +198,25 @@ class Kohana_Menu_Item {
 	public function get_classes()
 	{
 		return implode(' ', $this->_config['classes']);
+	}
+
+	/**
+	 * Check if menu is fully custom
+	 *
+	 * @return bool
+	 */
+	public function is_custom()
+	{
+		return (bool) $this->_config['custom'];
+	}
+
+	/**
+	 * Get fully custom menu html code
+	 *
+	 * @return string
+	 */
+	public function get_custom()
+	{
+		return $this->_config['custom'];
 	}
 }

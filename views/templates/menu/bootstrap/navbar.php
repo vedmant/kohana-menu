@@ -16,19 +16,19 @@
 	<?php foreach ($menu->get_visible_items() as $item):
 
 		// Is this a dropdown-menu with sibling links?
-		if ($item->has_siblings()):?>
+		if ($item->has_children()): ?>
 
-			<li class="dropdown  <?= $item->get_classes() ?>" title="<?= $item->tooltip ?>">
+			<li class="dropdown <?php echo $item->get_classes(); ?>" title="<?php echo $item->tooltip; ?>">
 				<a href="#"
 				   class="dropdown-toggle"
-				   data-toggle="dropdown"><?= $item->title ?><b class="caret"></b>
+				   data-toggle="dropdown"><?php echo $item->title; ?><b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu">
-					<?php foreach ($item->siblings as $subitem): ?>
-						<li class="<?= $subitem->get_classes() ?>">
-							<?= (string) $subitem ?>
+					<?php foreach ($item->children as $subitem): ?>
+						<li class="<?php echo $subitem->get_classes(); ?>">
+							<?php echo (string) $subitem; ?>
 						</li>
-					<?php endforeach ?>
+					<?php endforeach; ?>
 				</ul>
 			</li>
 
@@ -36,11 +36,11 @@
 		else:
 			// No, this is a "normal", single-level menu
 			?>
-			<li class="<?= $item->get_classes() ?>">
-				<?= (string) $item ?>
+			<li class="<?php echo $item->get_classes() ?>">
+				<?php echo (string) $item; ?>
 			</li>
 
-		<?php endif ?>
+		<?php endif; ?>
 
-	<?php endforeach ?>
+	<?php endforeach; ?>
 </ul>

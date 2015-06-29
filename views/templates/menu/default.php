@@ -13,9 +13,9 @@
 <nav>
 	<ul>
 		<?php foreach ($menu->get_visible_items() as $item): ?>
-			<li class="<?= $item->get_classes() ?>">
-				<?= (string) $item ?>
+			<li class="<?= $item->get_classes(); ?>">
+				<?php echo (string) $item; ?>
 			</li>
-		<?php endforeach ?>
+		<?php endforeach; ?>
 	</ul>
 </nav>

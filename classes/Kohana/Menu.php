@@ -29,7 +29,12 @@ class Kohana_Menu {
 	 *
 	 * @since 3.0
 	 */
-	const VIEWS_DIR = 'templates/menu';
+	const VIEWS_DIR = 'menu';
+
+	/**
+	 * @var array Instances storage
+	 */
+	private static $_instances = array();
 
 	/**
 	 * @var array Holds current menu configuration
@@ -53,6 +58,11 @@ class Kohana_Menu {
 	protected $_active_item_index;
 
 	/**
+	 * @var bool Flag shows if current menu item was set
+	 */
+	protected $_menu_item_set = false;
+
+	/**
 	 * Initialize a new menu.
 	 * Use the factory method instead of the `new` keyword.
 	 *
@@ -61,7 +71,7 @@ class Kohana_Menu {
 	 */
 	public function __construct(array $config)
 	{
-		$menu_items = array();
+		$menu_items = [];
 		if (array_key_exists('items', $config)) {
 			$menu_items = $config['items'];
 
@@ -71,7 +81,7 @@ class Kohana_Menu {
 
 		// Save menu config, overriding default values
 		$this->_config = array_replace(self::get_default_config(), $config);
-        
+
 		// Load menu view (auto detected or manually specified)
 		$this->_view = View::factory($this->get_view_path());
 
@@ -105,9 +115,9 @@ class Kohana_Menu {
 	protected static function _get_menu_config($config)
 	{
 		if (Kohana::find_file('config'.DIRECTORY_SEPARATOR.self::CONFIG_DIR, $config) === FALSE) {
-			throw new Kohana_Exception('Menu configuration file ":path" not found!', array(
+			throw new Kohana_Exception('Menu configuration file ":path" not found!', [
 				':path' => APPPATH.'config'.DIRECTORY_SEPARATOR.self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config.EXT
-			));
+			]);
 		}
 
 		return Kohana::$config->load(self::CONFIG_DIR.DIRECTORY_SEPARATOR.$config)
@@ -122,11 +132,20 @@ class Kohana_Menu {
 	 * @return Menu
 	 * @since 2.0
 	 */
-	public static function factory($config_file = 'simple')
+	public static function factory($config_file = 'bootstrap', $config = array())
 	{
+		// Get already created instance
+		if(array_key_exists($config_file, self::$_instances))
+		{
+			return self::$_instances[$config_file];
+		}
+
 		// Load menu config
 		$menu_config = self::_get_menu_config($config_file);
-        
+
+		// Add custom options
+		$menu_config = Arr::overwrite($menu_config, $config);
+
 		// Auto-detect view path when no view file given
 		if (Arr::get($menu_config, 'view') === NULL) {
 			$view_file = Kohana::find_file('views/'.self::VIEWS_DIR, $config_file)
@@ -134,7 +153,7 @@ class Kohana_Menu {
 			$menu_config['view'] = self::VIEWS_DIR.DIRECTORY_SEPARATOR.$view_file;
 		}
 
-		return new Menu($menu_config);
+		return self::$_instances[$config_file] = new Menu($menu_config);
 	}
 
 	/**
@@ -162,7 +181,15 @@ class Kohana_Menu {
 	 */
 	public function __toString()
 	{
-		return $this->render();
+		$return = '';
+
+		try{
+			$return = $this->render();
+		} catch (Exception $e) {
+			return $e->getMessage();
+		}
+
+		return $return;
 	}
 
 	/**
@@ -185,10 +212,10 @@ class Kohana_Menu {
 	public function get_visible_items()
 	{
 		if ($this->_items === NULL) {
-			return array();
+			return [];
 		}
 
-		$visible_items = array();
+		$visible_items = [];
 
 		foreach ($this->_items as $key => $item) {
 			if (! $item->is_visible()) {
@@ -204,11 +231,16 @@ class Kohana_Menu {
 	 * Set the currently active menu item (by applying the `active_item_class` CSS class)
 	 *
 	 * @since 2.0
+	 *
 	 * @param int|string $id The ID of the menu (numerical array ID from the config file) or URL of a menu item
-	 * @return Menu_Item|bool The active menu item or FALSE when item not found
+	 * @param bool       $important
+	 *
+	 * @return bool|Menu_Item The active menu item or FALSE when item not found
 	 */
-	public function set_current($id = 0)
+	public function set_current($id = 0, $important = false)
 	{
+		if(! $important && $this->_menu_item_set) return false;
+
 		$active_item = $this->get_item($id);
 
 		if (! $active_item) {
@@ -221,6 +253,7 @@ class Kohana_Menu {
 		}
 
 		$active_item->add_class($this->_config['active_item_class']);
+		$this->_menu_item_set = true;
 		return $active_item;
 	}
 
@@ -262,6 +295,13 @@ class Kohana_Menu {
 				if ($menu_item->url === $id) {
 					return $menu_item;
 				}
+				if(count($menu_item->children)) {
+					foreach ($menu_item->children as $menu_item_child) {
+						if ($menu_item_child->url === $id) {
+							return $menu_item_child;
+						}
+					}
+				}
 			}
 		}
 		return FALSE;
@@ -273,11 +313,11 @@ class Kohana_Menu {
 	 */
 	public static function get_default_config()
 	{
-		return array(
+		return [
 			'active_item_class' => 'active',
 			'view'              => FALSE,
 			'guess_active_item' => FALSE,
-		);
+		];
 	}
 
 	/**
